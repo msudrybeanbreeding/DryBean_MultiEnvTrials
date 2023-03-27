@@ -1,0 +1,559 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r loading data pred year, warning=FALSE, message=TRUE, results='asis'}
+data_beans = read.csv("data/DataBean_MET_GYv2.csv",h=T, stringsAsFactors = T)
+
+# Data adjustment
+# All the effect columns must be as a factor to run in ASReml-r.
+cols <- c("rep", "name", "loc","year", "mkt", "year_loc")
+data_beans[cols] <- lapply(data_beans[cols], factor)
+data_beans <- data.table(data_beans)
+
+```
+
+### Box plot dist.
+
+```{r Box plot_raw data complete, eval= FALSE, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+
+plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=data_beans, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin", grouping.var = mkt ) 
+#print(plotDM_stats_mkt_loc)
+
+plotDM_stats_mkt_year<- grouped_ggbetweenstats(data=data_beans, x= year, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Years",
+                              plot.type = "boxviolin", grouping.var = mkt ) 
+#print(plotDM_stats_mkt_year)
+
+print(arrange_ggplot(plotDM_stats_mkt_loc,plotDM_stats_mkt_year))
+
+```
+
+
+```{r Box plot_raw data, eval=TRUE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, out.width="100%"}
+
+a<- ggplot(data=data_beans, aes(x=reorder(loc, -gy_kg_ha), y=gy_kg_ha, fill=loc)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  facet_wrap("year")+
+  facet_grid("mkt") +
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,6000), breaks = seq(1000, 6000, by = 1000)) +
+  theme(axis.text.x=element_text(angle = 90),
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs(title="GY (kg/ha)", 
+       subtitle="Data distribution by location", 
+       caption=NULL, x=NULL, y=NULL)
+
+b<- ggplot(data=data_beans, aes(x=reorder(year, -gy_kg_ha), y=gy_kg_ha, fill=year)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+    #outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  facet_wrap("loc")+
+  facet_grid("mkt") +
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,6000), breaks = seq(1000, 6000, by = 1000)) +
+  theme(axis.text.x=element_text(angle = 90),
+        strip.text=element_text(face="bold"),
+        legend.position = "none",
+        axis.text.y = element_blank(),
+         panel.grid = element_blank())+
+  labs(title="GY (kg/ha)", 
+       subtitle="Data distribution by year", 
+       caption=NULL, x=NULL, y=NULL)
+
+print(arrange_ggplot(a,b))
+
+```
+
+#### BB
+```{r}
+
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="BB"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= loc, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB2<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1)%>% 
+  filter(p.value <= 0.05)
+
+bb1<- ggplot(data=data_beans_plotBB, aes(x=reorder(loc, -gy_kg_ha), y=gy_kg_ha, fill=loc)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(axis.text.x=element_blank(),
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs(title="GY (kg/ha)", 
+       subtitle="Data distribution by location", 
+       caption=NULL, x=NULL, y="BB")
+
+bb1<-bb1 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB2$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6700, 7500,8300, 9100),
+    annotations      = as.character(stats_results_BB2$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+```{r}
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="BB"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= year, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB3<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1) %>% 
+  filter(p.value <= 0.05)
+
+bb2<- ggplot(data=data_beans_plotBB, aes(x=reorder(year, -gy_kg_ha), y=gy_kg_ha, fill=year)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(axis.text.x=element_blank(),
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs(title="GY (kg/ha)", 
+       subtitle="Data distribution by year", 
+       caption=NULL, x=NULL, y=NULL)
+
+
+bb2<-bb2 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB3$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6300, 6700,7100, 7400, 7800,8200, 8600, 9000, 9400),
+    annotations      = as.character(stats_results_BB3$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+
+#### NB
+```{r}
+
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="NB"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= loc, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB2<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1)%>% 
+  filter(p.value <= 0.05)
+
+nb1<- ggplot(data=data_beans_plotBB, aes(x=reorder(loc, -gy_kg_ha), y=gy_kg_ha, fill=loc)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(axis.text.x=element_blank(),
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs( 
+       caption=NULL, x=NULL, y="NB")
+
+nb1<-nb1 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB2$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6700, 7500,8300, 9100),
+    annotations      = as.character(stats_results_BB2$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+```{r}
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="NB"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= year, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB3<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1) %>% 
+  filter(p.value <= 0.05)
+
+nb2<- ggplot(data=data_beans_plotBB, aes(x=reorder(year, -gy_kg_ha), y=gy_kg_ha, fill=year)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(axis.text.x=element_blank(),
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs( 
+       caption=NULL, x=NULL, y=NULL)
+
+
+nb2<-nb2 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB3$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6300, 6700,7100, 7400, 7800,8200, 8600, 9000, 9400),
+    annotations      = as.character(stats_results_BB3$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+#### SR
+```{r}
+
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="SR"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= loc, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB2<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1)%>% 
+  filter(p.value <= 0.05)
+
+sr1<- ggplot(data=data_beans_plotBB, aes(x=reorder(loc, -gy_kg_ha), y=gy_kg_ha, fill=loc)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs(
+       caption=NULL, x="Locations", y="SR")
+
+sr1<-sr1 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB2$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6700, 7500,8300, 9100),
+    annotations      = as.character(stats_results_BB2$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+```{r}
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="SR"))
+
+stats_results_BB<- ggbetweenstats(data=data_beans_plotBB, x= year, y=gy_kg_ha) %>% extract_stats()   
+#print(stats_results_BB$pairwise_comparisons_data$p.value)
+
+stats_results_BB3<- stats_results_BB$pairwise_comparisons_data %>% 
+dplyr::mutate(groups = purrr::pmap(.l = list(group1, group2), .f = c)) %>%
+  dplyr::arrange(group1) %>% 
+  filter(p.value <= 0.05)
+
+sr2<- ggplot(data=data_beans_plotBB, aes(x=reorder(year, -gy_kg_ha), y=gy_kg_ha, fill=year)) +
+  ggdist::stat_halfeye(
+    adjust = 0.5,
+    justification = -0.1,
+    .width = 0,
+    point_colour = NA
+  ) +
+  
+  geom_boxplot( 
+    width = .12,
+   # outlier.color = NA,
+    alpha = 0.5)+
+  tidyquant::theme_tq()+
+  #facet_grid("loc")+
+  tidyquant::scale_fill_tq() +
+  scale_x_discrete(expand = c(0.03,0)) +
+  scale_y_continuous(limits = c(1000,10000), breaks = seq(1000, 10000, by = 1000)) +
+  theme(
+        strip.text=element_blank(),
+        legend.position = "none",
+        panel.grid = element_blank())+
+  labs(
+       caption=NULL, y=NULL, x="Years")
+
+
+sr2<- sr2 +
+  ggsignif::geom_signif(
+    comparisons      = stats_results_BB3$groups,
+    map_signif_level = TRUE,
+    tip_length       = 0.01,
+    textsize         = 2.7,
+    y_position       = c(5900, 6500, 7200,8000, 8700, 9500),
+    annotations      = as.character(stats_results_BB3$expression),
+    test             = NULL,
+    na.rm            = TRUE,
+    parse            = TRUE
+  )
+```
+
+
+Box plot distribution for each market class in this study across years and locations.
+```{r plot_Box complete final, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+
+print(arrange_ggplot(bb1,bb2,
+                     nb1,nb2,
+                     sr1,sr2,
+                     nrow = 3,
+                     ncol = 2))
+
+```
+
+
+### GEI Comparisons (loc:year) - BB 
+
+Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
+
+- Black beans (BB)
+**Pairwise Games-Howell test used. Comparisons showing only significant**
+
+```{r plot_ggstatsplot_desc_BB, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+data_beans_plotBB<- droplevels(subset(data_beans, mkt=="BB"))
+
+plotDM_stats_mkt_loc_BB<- grouped_ggbetweenstats(data=data_beans_plotBB, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin", grouping.var = year ) 
+print(plotDM_stats_mkt_loc_BB)
+
+```
+
+
+
+### GEI Comparisons (loc:year) - NB 
+
+Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
+- Navy beans (NB)
+**Pairwise Games-Howell test used. Comparisons showing only significant**
+
+```{r plot_ggstatsplot_desc_NB, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+
+data_beans_plotNB<- droplevels(subset(data_beans, mkt=="NB"))
+
+plotDM_stats_mkt_loc_NB<- grouped_ggbetweenstats(data=data_beans_plotNB, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin", grouping.var = year ) 
+print(plotDM_stats_mkt_loc_NB)
+```
+
+### GEI Comparisons (loc:year) - SR 
+
+Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
+- Black beans (SR)
+**Pairwise Games-Howell test used. Comparisons showing only significant**
+
+```{r plot_ggstatsplot_desc_SR, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+
+data_beans_plotSR<- droplevels(subset(data_beans, mkt=="SR"))
+
+plotDM_stats_mkt_loc_SR<- grouped_ggbetweenstats(data=data_beans_plotSR, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin", grouping.var = year ) 
+print(plotDM_stats_mkt_loc_SR)
+```
+
+
+### Scatter plot
+
+For further insight into the correlation structure between trials a scatter plot matrix can be made using the package `statgenGxE`
+
+```{r TDscatter2, warning=FALSE, out.width="100%", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+dropsTD <- statgenSTA::createTD(data = data_beans, genotype = "name", trial = "loc")
+options("statgen.genoColors" = c("black", "blue", "red"))
+plot(dropsTD, plotType = "scatter", traits = "gy_kg_ha", colorGenoBy = "mkt", 
+     colorTrialBy = "trial", title = "Scatterplots of trials for grain yield (Kg/ha)" )
+
+```
+
+
+### Outliers
+
+Check for common errors in multi-environment trial by market class data using the R package `metan`
+However, the data set was cleaned before at a previous analysis not shown in this vignette using the criteria for GY:
+
+- yield <= 0.5 | yield >= 7.5 (considering yield as Lb per plot)
+- moisture >= 30 | moisture <= 5 (considering moisture in %)
+
+At this point yield data will not be removed anymore, but we can check it out for further investigation, if it was needed. 
+
+```{r data_outliers1, warning=FALSE, message=TRUE, results='asis'}
+
+out_beans<- find_outliers(data_beans, by=mkt, var = gy_kg_ha, plots = F)
+
+#out_beans
+```
+
+- No outliers removed after the data inspection based on the Breeder expertise.
+
+### Map of locations 
+
+This figure represent all counties locations evaluated in this study at Michigan, midwest in the USA.
+
+```{r locations map, warning=FALSE, out.width="100%", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H"}
+
+source("utils/map.R")
+
+print(MI_trials_beans_map)
+
+```
+
+
+### Missing values
+
+```{r missing geno gy, warning=FALSE, message=FALSE, out.width="100%", fig.pos="H", fig.align="center", dpi = 600, fig.cap="Missing genotypes by market classes"}
+
+data_beans.miss.f<- data_beans %>% 
+  unite(name_year_loc, c(name, year_loc), remove = F) %>% 
+  group_by(name_year_loc) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>% 
+  filter(!is.na(Mean)) 
+
+data_beans.miss<- data_beans %>% 
+  unite(name_year_loc, c(name, year_loc), remove = F)
+
+data_beans.miss<- data_beans.miss%>% 
+  filter((name_year_loc %in% data_beans.miss.f$name_year_loc))  
+
+gg_miss_fct(data_beans.miss,fct = mkt)+ggtitle("Missing values (NA)") + 
+   theme(axis.text.x=element_text(face="bold", size = 12), 
+         axis.text.y = element_text(face = "bold",size = 12) ,
+         title = element_text(face = "bold",size = 14))
+```
+
+
+
+### Coincidence Genotypes
+
+> Genotypes coincidentes across years combinations
+
+```{r coincidence geno fig1, warning=FALSE,  fig.pos="H", message=FALSE, out.width="100%", fig.align="center", dpi = 600, fig.cap="Coincidence genotypes per year and combinations of years across locations for each market class."}
+
+source("utils/Coinc.R")
+
+arrange_ggplot(plotB, plotN, plotSR,ncol = 1)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

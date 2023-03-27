@@ -1,0 +1,274 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+## Data preparation
+
+```{r loading data predicted year, warning=FALSE, message=TRUE, results='asis'}
+#setwd("G:/Shared drives/Bean_Lab/Volpato/GxE_Variety_trials_Scott/Manuscript/Suppl_mat/TemplateResults-main")
+data_beans = read.csv("data/DataBean_MET_GYv2.csv",h=T, stringsAsFactors = T)
+
+# Data adjustment
+# All the effect columns must be as a factor to run in ASReml-r.
+cols <- c("rep", "name", "loc","year", "mkt", "year_loc")
+data_beans[cols] <- lapply(data_beans[cols], factor)
+data_beans <- data.table(data_beans)
+
+```
+
+
+### By year mixed model analysis
+
+The BLUPS will be estimated using a mixed-effect model and these values obtained by year using a loop with `ASReml` and storage into the list. 
+
+The following mixed model was used to estimate the BLUPs of each genotype within year with one value per genotype per year (random effects are underlined in all equations):
+
+
+$$
+\underline{Y_{ijl}} = \mu  + \underline{G_i} + {E_{l}} + \beta_{jl} + \underline{GE_{il}} + \underline{\varepsilon_{ijl}} 
+$$
+	
+where ${Y_{ijl}}$ is the response variable (e.g., grain yield) observed in the *j*th repetion of the *i*th genotype in the *l*th location (*i* = 1, 2, ..., *g*;  *j* = 1, 2, ..., *b*; *l* = 1, 2, ..., *e*); $\mu$ is the grand mean; $\underline{G_i}$ is the effect of the *i*th genotype; $E_l$ is the effect of the *l*th location (env); $\beta_{jl}$ is the effect of the *j*th rep with the *l*th location; $\underline{GE_{il}}$ is the interaction effect of the *i*th genotype nested within the *l*th location; and $\mathop \varepsilon \nolimits_{ijl}$ is the random error, in witch with $G_{i}$~N(0,$\sigma_{G}^{2}$), $GE_{il}$~N(0,$\sigma_{GE}^{2}$), and $\varepsilon_{ijl}$~N(0,$\sigma_{\varepsilon}^{2}$), all independent, where $G_{G}^{2}$ is the genotype (name) variance,$GS_{GE}^{2}$ is the interaction genotype x environment variance, and $\sigma_{\varepsilon}^{2}$ is the mean error variance across experiments.
+
+```{r asreml blups pred year, warning=FALSE, message=TRUE, results='asis'}
+## Analysis per site and mkt class
+mkt_n <- levels(data_beans$mkt)
+
+Envs <- levels(data_beans$year)
+
+stgI_list <- matrix(data=list(), nrow=length(Envs), ncol=1,
+                    dimnames=list(Envs, c("BLUPS")))
+
+mkt <- nlevels(data_beans$mkt)
+
+for(k in 1:mkt){
+
+  bk <- levels(data_beans$mkt)
+  cj <- bk[k]
+  #print(cj)
+  
+  data_beans_temp <- droplevels(subset(data_beans, mkt==cj))
+
+  for (i in Envs){
+    #i=Envs[1]
+    Edat <- droplevels(subset(data_beans_temp, year==i))
+    
+    #print(i)
+    
+mod.1 <- asreml(fixed       = gy_kg_ha ~  loc + loc:rep,
+                     random      = ~  name + name:loc,
+                     data        = Edat,
+                     predict     = predict.asreml(classify = "name"),
+                     trace       = F,
+                     maxit       = 500)
+    
+   # print(summary.asreml(mod.1)$varcomp)
+    # wald(mod.1)
+
+  blup.1<- data.table((mod.1$predictions$pvals[1:3])) 
+  names(blup.1) <- c("name", "yield", "se")
+  blup.1$mkt<- cj
+  
+    stgI_list[[i, "BLUPS"]] <- blup.1 # put all the results of Stage 1 in the list
+    
+   # rm(Edat,mod.1, blue, blup.1)
+    
+  }
+   if(k==1){stgI_list.1<-stgI_list}else{stgI_list.1<-rbind(stgI_list.1, stgI_list)}
+   
+}
+```
+
+
+#### Preparing dataset 
+
+Merging the original data to have all the factors in the final table with: `name`, `year`, and `mkt`
+
+```{r pred year2,warning=FALSE, message=TRUE, results='asis'}
+##### Unlist the results of Stage I and format as data.table #####
+blups_stageI <- data.table(ldply(stgI_list.1[, "BLUPS"], data.frame, .id="year"))
+
+blues_stage.I <- blups_stageI[order(blups_stageI$year,blups_stageI$mkt),]
+
+# Change the order of columns
+blues_stage.I <- blues_stage.I %>% 
+  dplyr::select(year, name, mkt, se, yield)
+
+str(blues_stage.I)
+```
+
+
+### Descriptive variance {.tabset}
+
+#### Beans data set by year
+
+```{r subset data pred year ,warning=FALSE, message=TRUE, results='asis'}
+
+if (knitr::is_html_output()) {
+
+  print_table(blues_stage.I)
+  
+}else{
+ 
+flextable(head(blues_stage.I)) %>% 
+   add_footer_lines(
+     c("Beans data set by year", 
+       "Header data set showing the 6 first entry")) %>% 
+   autofit() %>% 
+   add_header_lines("Dry Beans varieties trial") %>% 
+  theme_design2()
+  
+}
+
+```
+
+
+#### Box plot distribution
+
+**Pairwise Games-Howell test used. Comparisons showing only significant**
+```{r plot_ggstatsplot_pred year, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values."}
+
+plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=blues_stage.I, x= year, y=yield, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Year",
+                              plot.type = "boxviolin", grouping.var = mkt
+                              ) 
+
+print(plotDM_stats_mkt_loc)
+
+#https://indrajeetpatil.github.io/ggstatsplot_slides/slides/ggstatsplot_presentation.html#1
+```
+
+
+```{r,warning=FALSE, message=TRUE, results='asis'}
+str(blues_stage.I)
+blues_stage.I$year <- as.numeric(blues_stage.I$year)
+
+blues_stage.I$year[blues_stage.I$year == 1]<- 17
+blues_stage.I$year[blues_stage.I$year == 2]<- 18
+blues_stage.I$year[blues_stage.I$year == 3]<- 19
+blues_stage.I$year[blues_stage.I$year == 4]<- 20
+blues_stage.I$year[blues_stage.I$year == 5]<- 21
+blues_stage.I$year[blues_stage.I$year == 6]<- 22
+
+```
+
+```{r figure pred year, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Genetic yield gains for black (BB), navy (NB) and (SR) market classes of dry beans varieties regressed against year. For BB yields have improved by 111 kg ha−1 annually, NB yields have improved by 67 kg ha−1 annually, and SR yields have improved by 6.64 kg ha−1 annually.Best linear unbiased predictors (BLUPs) of varieties yields in each market classes were based on trials in four environments (BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola) across the state of Michigan from 2017 to 2021."}
+
+cols = c("black", "turquoise", "red")
+#formula <- y ~ x
+
+plot1<- ggplot(data = blues_stage.I, aes(x = year, y = yield)) +
+        #geom_point(aes(shape = mkt)) +
+        geom_point(aes(color = mkt)) +
+        geom_smooth(method = "lm", 
+                    se = F, 
+                    aes(color = mkt, fill = mkt), size = 1.4, alpha = 0.1) +
+        labs(title = "Genetic Yield Gains",
+             x = "Years",
+             y = "Grain Yield (kg/ha)") +
+       theme_bw()+
+    stat_poly_eq(method = "lm", coef.digits = 5, #formula = y ~ x, 
+             aes(label = paste(after_stat(eq.label), sep = "*\", \"*"
+                               ), color = mkt, size = 3), 
+             parse = TRUE) + 
+    # change name of legend here 
+  scale_fill_manual(name="Market Class",values=cols)+
+  scale_color_manual(name="Market Class",values=cols) +
+   theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    legend.position = c(.9, .12),
+    legend.title = element_text(hjust = 0.5),
+    axis.title=element_text(size=12,face="bold"),
+    axis.text=element_text(size=11)) +
+  scale_y_continuous(breaks = seq(1800,4600,200))
+
+#print(plot1)
+
+```
+
+
+```{r}
+beans_desc <- desc_stat(blues_stage.I, yield, stats = ("ci.t, hmean, n, se"), by = mkt)
+#print(beans_desc)
+
+beans_desc<-beans_desc[-c(2)]
+
+colnames(beans_desc)<- c("MKT","CI", "Mean", "N", "SE")
+
+beans_desc<-data.frame(beans_desc, row.names =T)
+
+#rownames(beans_desc) <- NULL
+
+```
+
+
+```{r plot_year_gains, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values."}
+
+plot1 + annotation_custom(tableGrob(beans_desc, theme = ttheme_default(base_size = 12, base_colour = "black", base_family = "",parse = T, padding = unit(c(4, 4), "mm"))), xmin=19, xmax=22, ymin=2000, ymax=2200 )
+```
+
+
+
+
+```{r ME figures years, eval=FALSE, include=FALSE}
+
+### ME by year
+
+# Figures used to generate the coincidence ME acroos years
+
+## Analysis per site and mkt class
+mkt_n <- levels(data_beans$mkt)
+
+Envs <- levels(data_beans$year)
+
+stgI_list <- matrix(data=list(), nrow=length(Envs), ncol=1,
+                    dimnames=list(Envs, c("BLUPS")))
+
+mkt <- nlevels(data_beans$mkt)
+
+for(k in 1:mkt){
+
+  bk <- levels(data_beans$mkt)
+  cj <- bk[k]
+  #print(cj)
+  
+  data_beans_temp <- droplevels(subset(data_beans, mkt==cj))
+
+  for (i in Envs){
+    #i=Envs[1]
+    Edat <- droplevels(subset(data_beans_temp, year==i))
+    
+gge_model.bb <- gge(Edat, loc, name, gy_kg_ha,
+                     centering = "environment", #2
+                    scaling = "sd", #1
+                    svp = "genotype")#2)
+
+e <- plot(gge_model.bb, type = 3,
+          size.text.env = 5,
+          plot_theme = theme_metan(grid =  "both",color.background = transparent_color()),
+         axis_expand = 1.2,
+         size.line = 0.7,
+         size.text.gen = 4,
+         size.text.win = 4.5,
+         title = F
+        ) 
+e <- e + labs(title=print(cj), subtitle = print(i))
+
+print(e)
+  }
+}
+
+  
+```
+
+
+
+
+
+
+
+
+
+

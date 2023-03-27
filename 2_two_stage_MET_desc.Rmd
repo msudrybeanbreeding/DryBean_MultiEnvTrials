@@ -1,0 +1,618 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### 1st Stage mixed model analysis
+
+```{r loading data pred year two stage, warning=FALSE, message=TRUE, results='asis'}
+#rm(list=ls())
+data_beans = read.csv("data/DataBean_MET_GYv2.csv",h=T, stringsAsFactors = T)
+#str(data_beans)
+# Data adjustment
+# All the effect columns must be as a factor to run in ASReml-r.
+cols <- c("rep", "name", "loc","year", "mkt", "year_loc")
+data_beans[cols] <- lapply(data_beans[cols], factor)
+data_beans <- data.table(data_beans)
+
+```
+
+
+The BLUES will be estimated using a mixed-effect model. The BLUEs will be obtained by location using a loop with `ASReml` and storage into the list. 
+
+The following mixed model was used to estimate the BLUEs of each genotype within location with one value per genotype per experiment and rep, for the first step (random effects are underlined in all equations):
+
+$$
+\underline{Y_{ik}} = \mu  + {G_i} + \underline{S_{k}} + \underline{GS_{ik}} + \underline{\varepsilon_{ik}} 
+$$
+
+where $Y_{ik}$ is the  observed yield in the *i*th genotype and *k*th year, $\mu$ is the overall mean, $G_i$ is the effect of the *i*th genotype, $S_{k}$ is the effect of the *k*th year, $GS_{ik}$ is the effect of the interaction between the ith genotype and the kth year, and $\varepsilon_{ik}$ are the residual, with $S_{k}$~N(0,$\sigma_{Y}^{2}$), $GS_{ik}$~N(0,$\sigma_{Y}^{2}$), and $\varepsilon_{ik}$~N(0,$\sigma_{\varepsilon}^{2}$), all independent, where $\sigma_{Y}^{2}$ is the year variance, and $\sigma_{\varepsilon}^{2}$ is the mean error variance across experiments. 
+
+
+```{r filter data balanced 1Y, warning=FALSE, message=TRUE, results='asis',echo = F}
+## Filter data to remove NA values by genotapy within year
+### Creating a list to be removed
+#head(data_beans)
+#str(data_beans)
+data_beans_6Y.f<- data_beans %>% 
+  group_by(name, year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 6)) ## Present in 6 years
+
+### Filter the data set according to the filter list
+data_beans_6Y<- data_beans %>% 
+  filter((name %in% data_beans_6Y.f$name)) %>% 
+  mutate(var_years = "6Y")
+
+data_beans_5Y.f<- data_beans %>% 
+  group_by(name, year ) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 5)) ## Present in 5 years
+
+### Filter the data set according to the filter list
+data_beans_5Y<- data_beans %>% 
+  filter((name %in% data_beans_5Y.f$name))%>% 
+  mutate(var_years = "5Y")
+
+data_beans_4Y.f<- data_beans %>% 
+  group_by(name, year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 4)) ## Present in 4 years
+
+### Filter the data set according to the filter list
+data_beans_4Y<- data_beans %>% 
+  filter((name %in% data_beans_4Y.f$name))%>% 
+  mutate(var_years = "4Y")
+
+data_beans_3Y.f<- data_beans %>% 
+  group_by(name, year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 3)) ## Present in 3 years
+
+### Filter the data set according to the filter list
+data_beans_3Y<- data_beans %>% 
+  filter((name %in% data_beans_3Y.f$name))%>% 
+  mutate(var_years = "3Y")
+
+data_beans_2Y.f<- data_beans %>% 
+  group_by(name, year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 2)) ## Present in 2 years
+
+### Filter the data set according to the filter list
+data_beans_2Y<- data_beans %>% 
+  filter((name %in% data_beans_2Y.f$name))%>% 
+  mutate(var_years = "2Y")
+
+data_beans_1Y.f<- data_beans %>% 
+  group_by(name, year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>%
+  dplyr::summarise(NotNA = !is.na(Mean)) %>% 
+  dplyr::summarise(Sum_NA = sum(NotNA, na.rm = TRUE)) %>%
+  filter((Sum_NA == 1)) ## Present in 1 year only
+
+### Filter the data set according to the filter list
+data_beans_1Y<- data_beans %>% 
+  filter((name %in% data_beans_1Y.f$name))%>% 
+  mutate(var_years = "1Y") %>% 
+  unite(name_year, c(name, year), remove = F)
+ 
+### Filter the data set according to the filter list
+# data_beans<- data_beans %>% 
+#   filter(!(name %in% data_beans_1Y$name)) %>% 
+#   droplevels()
+
+data_beans <- bind_rows(data_beans_1Y, data_beans_2Y, data_beans_3Y, data_beans_4Y, data_beans_5Y, data_beans_6Y)
+
+```
+
+
+```{r asreml blues 1, warning=FALSE, message=TRUE, results='asis'}
+
+## Loop to get the year effect corrected by year
+## Only genotypes present in years
+
+#str(data_beans)
+data_beans$var_years <- as.factor(data_beans$var_years)
+year <- nlevels(data_beans$var_years)
+## Analysis per site and mkt class
+#mkt_n <- levels(data_beans$mkt)
+
+Envs <- levels(data_beans$loc)
+
+stgI_list <- matrix(data=list(), nrow=length(Envs), ncol=1,
+                    dimnames=list(Envs, c("BLUES")))
+
+mkt <- nlevels(data_beans$mkt)
+
+for (y in 1:year) {
+
+  by <- levels(data_beans$var_years)
+  cy <- by[y]
+  
+  data_beans_temp1 <- droplevels(subset(data_beans, var_years==cy))
+  
+if(y == 1) {next
+
+}else { 
+  
+  for(k in 1:mkt){
+
+  bk <- levels(data_beans_temp1$mkt)
+  cj <- bk[k]
+  #print(cj)
+  
+  data_beans_temp2 <- droplevels(subset(data_beans_temp1, mkt==cj))
+
+  for (i in Envs){
+    #i=Envs[1]
+    Edat <- droplevels(subset(data_beans_temp2, loc==i))
+    
+    #print(i)
+    
+    mod.1 <- asreml(fixed       = gy_kg_ha ~ name:rep,
+                    random      = ~ year + name:year ,
+                    data        = Edat,
+                predict     = predict.asreml(classify = "name:rep",vcov=TRUE, aliased = T),
+                    trace       = F,
+                    maxit       = 500)
+    
+   # print(summary.asreml(mod.1)$varcomp)
+    # wald(mod.1)
+
+  blue.1<- data.table((mod.1$predictions$pvals[1:4])) 
+  names(blue.1) <- c("name", "rep", "yield", "se")
+  blue.1$mkt<- cj
+  blue.1$var_years<- cy
+  
+    stgI_list[[i, "BLUES"]] <- blue.1 # put all the results of Stage 1 in the list
+    
+    rm(Edat,mod.1, blue, blue.1)
+    
+   }
+   if(k==1){stgI_list.1<-stgI_list}else{stgI_list.1<-rbind(stgI_list.1, stgI_list)}
+   
+}
+}
+  if(y==2){stgI_list.2<-stgI_list.1}else{stgI_list.2<-rbind(stgI_list.2, stgI_list.1)}
+  
+}
+```
+
+
+#### Preparing dataset of Stage I for Stage II 
+
+Merging the original data to have all the factors in the final table with: `name`, `loc`, `mkt`, `rep`
+
+```{r Preparing dataset to Stage II a,warning=FALSE, message=TRUE, results='asis'}
+##### Unlist the results of Stage I and format as data.table #####
+blues_stageI <- data.table(ldply(stgI_list.2[, "BLUES"], data.frame, .id="loc"))
+
+blues_stage.I <- blues_stageI[order(blues_stageI$loc,blues_stageI$name),]
+
+blues_stage.I.SEmean <- blues_stage.I %>%
+  dplyr::summarise(Mean_SE = mean(se, na.rm = TRUE))
+
+print(blues_stage.I.SEmean)
+#str(blues_stage.I)
+```
+
+
+```{r Preparing dataset to Stage II b,warning=FALSE, message=TRUE, results='asis', echo = F}
+### Adjusting the data which contains in only one year
+data_beans_1Y.f2<- data_beans_1Y %>% 
+  group_by(name_year) %>% 
+  dplyr::summarise(Mean = mean(gy_kg_ha, na.rm = TRUE)) %>% 
+  filter(!is.na(Mean))
+
+data_beans_1Y_v2<- data_beans_1Y %>% 
+  filter((name_year %in% data_beans_1Y.f2$name_year))
+
+data_beans_1Y.sel<- data_beans_1Y_v2 %>% 
+  dplyr::select(loc, name, rep, gy_kg_ha,mkt)
+colnames(data_beans_1Y.sel)<- c('loc', 'name', 'rep', 'yield','mkt')
+
+blues_stage.I <- blues_stage.I %>% 
+  dplyr::select(loc, name, rep, yield,mkt)
+
+## Merging both data set
+blues_stage.I <- rbind(blues_stage.I,data_beans_1Y.sel)
+
+#write.csv(blues_stage.I,"blues_stage.I.csv",row.names=T,quote=F)
+```
+
+```{=html}
+<!-- 
+!!!! R script to paper publication will start from here!!!
+-->
+```
+
+
+```{r tab.cap="blues_stage.I", warning=FALSE, message=TRUE, results='asis'}
+# Change the order of columns
+blues_stage.I <- blues_stage.I %>% 
+  dplyr::select(loc, name, rep, mkt, yield)
+  
+```
+
+
+```{r eval=FALSE, include=FALSE}
+#write.csv(blues_stage.I,"blues_stage.I.csv",row.names=T,quote=F)
+
+```
+
+
+### 2nd Stage mixed model analysis 
+
+The following linear mixed model with interaction effect will be used in the 2-Stage in order to investigate the multi-environment trials (MET) as follow:
+
+$$
+\underline{Y_{ijl}} = \mu  + \underline{G_i} + {E_{l}} + \beta_{jl} + \underline{GE_{il}} + \underline{\varepsilon_{ijl}} 
+$$
+	
+where ${Y_{ijl}}$ is the response variable (e.g., grain yield) observed in the *j*th repetion of the *i*th genotype in the *l*th location (*i* = 1, 2, ..., *g*;  *j* = 1, 2, ..., *b*; *l* = 1, 2, ..., *e*); $\mu$ is the grand mean; $\underline{G_i}$ is the effect of the *i*th genotype; $E_l$ is the effect of the *l*th location (env); $\beta_{jl}$ is the effect of the *j*th rep with the *l*th location; $\underline{GE_{il}}$ is the interaction effect of the *i*th genotype nested within the *l*th location; and $\mathop \varepsilon \nolimits_{ijl}$ is the random error, in witch with $G_{i}$~N(0,$\sigma_{G}^{2}$), $GE_{il}$~N(0,$\sigma_{GE}^{2}$), and $\varepsilon_{ijl}$~N(0,$\sigma_{\varepsilon}^{2}$), all independent, where $G_{G}^{2}$ is the genotype (name) variance,$GS_{GE}^{2}$ is the interaction genotype x environment variance, and $\sigma_{\varepsilon}^{2}$ is the mean error variance across experiments.
+
+### By market classes
+
+- Getting the files for the individually market classes
+
+```{r subset data1,warning=FALSE, message=TRUE, results='asis'}
+blues_stage.I_BB <- droplevels(subset(blues_stage.I, mkt=="BB"))
+blues_stage.I_NB <- droplevels(subset(blues_stage.I, mkt=="NB"))
+blues_stage.I_SR <- droplevels(subset(blues_stage.I, mkt=="SR"))
+  
+```
+
+
+```{r}
+blues_stage.I_table1<- blues_stage.I %>% 
+  group_by(loc, rep, mkt) %>% 
+  dplyr::summarise(count = length(name)) 
+
+blues_stage.I_table1<- blues_stage.I_table1[,3:4]
+blues_stage.I_table1<- blues_stage.I_table1[1:3,]
+
+blues_stage.I_table1
+
+```
+
+
+```{r subset data1 ,warning=FALSE, message=TRUE, results='asis'}
+str(blues_stage.I_BB)
+if (knitr::is_html_output()) {
+
+  print_table(blues_stage.I_BB)
+  
+}else{
+
+flextable(head(blues_stage.I_BB)) %>% 
+   add_footer_lines(
+     c("Black beans data set", 
+       "Header data set showing the 6 first entry")) %>% 
+   autofit() %>% 
+   add_header_lines("Dry Beans varieties trial") %>% 
+  theme_design2()
+}
+
+if (knitr::is_html_output()) {
+
+  print_table(blues_stage.I_NB)
+  
+}else{
+  
+flextable(head(blues_stage.I_NB)) %>% 
+   add_footer_lines(
+     c("Navy beans data set", 
+       "Header data set showing the 6 first entry")) %>% 
+   autofit() %>% 
+   add_header_lines("Dry Beans varieties trial") %>% 
+  theme_design2()
+}
+
+if (knitr::is_html_output()) {
+
+  print_table(blues_stage.I_SR)
+  
+}else{
+
+flextable(head(blues_stage.I_SR)) %>% 
+   add_footer_lines(
+     c("Red beans data set", 
+       "Header data set showing the 6 first entry")) %>% 
+   autofit() %>% 
+   add_header_lines("Dry Beans varieties trial") %>% 
+  theme_design2()
+}
+
+```
+
+
+### Descriptive variance {.tabset}
+
+#### Box plot distribution
+
+- Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
+
+
+**Pairwise Games-Howell test used. Comparisons showing only significant**
+
+```{r plot_ggstatsplot_met, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Figure S4: Combination of box and violin plots along with jittered data points for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola."}
+
+plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=blues_stage.I, x= loc, y=yield, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin", grouping.var = mkt
+                              ) 
+
+print(plotDM_stats_mkt_loc)
+
+#https://indrajeetpatil.github.io/ggstatsplot_slides/slides/ggstatsplot_presentation.html#1
+```
+
+
+
+#### Phenotypic variance components 
+
+
+```{r coincidence geno1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.pos="H", fig.align="center", dpi = 600, out.width="100%", fig.cap="Proportion of the phenotypic variance for three dry beans traits evaluated across three locations. GY1, grain yield from 2017 to 2021; GY2, grain yield only in 2021; DM, days to maturity; PH, plant height; LD, lodging."}
+
+
+data_beans_var = read.csv("data/VarStack.csv",h=T, stringsAsFactors = T)
+data_beans_var$trait <- factor(data_beans_var$trait, levels=c("GY1", "GY2", "DM", "PH", "LD"))
+
+ggplot(data_beans_var, aes(x = trait, y = Freq, fill = Comp, label = Comp)) +
+  geom_bar(stat = "identity") +
+  #geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  facet_wrap("mkt") +
+  geom_text(aes(label = round(Freq, 2), x = trait, y = Freq), data = data_beans_var,size = 5, position = position_stack(vjust = 0.5),fontface = "bold") +
+  labs(y = "Proportion of phenotypic variance", fill = "", x = NULL) +
+  theme_classic() +
+  #theme(strip.background = element_blank()) +
+  scale_fill_manual(values=c("#CC6666", "#9999CC", "#66CC99"),
+                    labels = c("Res", "G", "GxE")) +
+  theme(legend.position = "bottom",
+        axis.text.x=element_text(face="bold", size = 12),
+        axis.text.y=element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y=element_text(face="bold", size = 14) ,
+        legend.text = element_text(size = 12, face="bold"), ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.01)))
+
+
+```
+
+
+
+#### Genotyping performance 
+
+
+```{r MET metan, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) from the 1-stage mixed model analysis. "}
+blues_stage.I_BB_ge<- na.omit(blues_stage.I_BB)
+stab_bb <- ge_plot(blues_stage.I_BB_ge, type = 1,
+        env = loc,
+        gen = name,
+        resp = yield) + xlab("") + ylab("Genotypes") +
+theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1),
+      axis.text.y = element_text(size = 7, angle = 0, vjust = 0.5, hjust = 1),
+      legend.position ="none", plot.title=element_text(hjust=0.5)) +
+  labs(title = "BB")
+#print (stab_bb)
+
+
+blues_stage.I_NB_ge<- na.omit(blues_stage.I_NB)
+stab_nb <- ge_plot(blues_stage.I_NB_ge, type = 1,
+        env = loc,
+        gen = name,
+        resp = yield) + xlab("Locations") + ylab("") +
+theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1),
+      axis.text.y = element_text(size = 7, angle = 0, vjust = 0.5, hjust = 1),
+      legend.position ="none", plot.title=element_text(hjust=0.5)) +
+  labs(title = "NB")
+#print (stab_nb)
+
+blues_stage.I_SR_ge<- na.omit(blues_stage.I_SR)
+stab_sr <- ge_plot(blues_stage.I_SR_ge, type = 1,
+        env = loc,
+        gen = name,
+        resp = yield) + xlab("") + ylab("") +
+theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1),
+      axis.text.y = element_text(size = 7, angle = 0, vjust = 0.5, hjust = 1),
+      legend.position ="right", 
+      plot.title=element_text(hjust=0.5)) +
+  labs(fill="GY(Kg/ha)", title = "SR")
+#print (stab_sr)
+
+print(arrange_ggplot(stab_bb, stab_nb,stab_sr))
+
+```
+
+
+
+## Descriptive MET  
+
+- Genetic correlations across environment using the Unstructured (US) variance-covariance structure.
+
+
+This mixed model will be used only for genotype x environment correlations in order to investigate the GEI correlations.
+
+```{r met asreml model, warning=FALSE, message=TRUE, results='asis'}
+
+mod.us.bb <- asreml(fixed = yield ~  loc + loc:rep ,
+                        random      = ~ name:us(loc) ,
+                        data        = blues_stage.I_BB,
+                        predict     = predict.asreml(classify = "name"),
+                        trace       = F,
+                        maxit       = 500)
+
+#print(wald(mod.us.bb))
+#print(summary.asreml(mod.us.bb)$varcomp)
+
+f=summary(mod.us.bb)$varcomp[1:10,1]
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- f
+corf=z/sqrt(diag(z)%*%t(diag(z)))
+#corf
+
+rownames(corf)=c(
+"BA",
+"HU",
+"SA",
+"TU")
+
+colnames(corf)=rownames(corf)
+
+plotBB<- ggcorrplot(corf, colors = c("#6D9EC1", "white", "#E46726"),  
+           title = "                   Black Beans",
+           show.legend = F,
+legend.title = "rgg" ,lab_size=5,tl.srt = 90,type = c("upper"), lab = T,digits = 4,
+outline.color = "white",pch.col = "white", tl.col = "blue",show.diag = FALSE)
+## genetic correlation: manual estimation
+# corr.loc_BA_HU<-summary(mod.us.bb)$varcomp[2,1] /
+#   sqrt(summary(mod.us.bb)$varcomp[1,1]*summary(mod.us.bb)$varcomp[3,1])
+
+# print(plotBB)
+
+mod.us.nb <- asreml(fixed = yield ~  loc + loc:rep ,
+                        random      = ~ name:us(loc) ,
+                        data        = blues_stage.I_NB,
+                        predict     = predict.asreml(classify = "name"),
+                        trace       = F,
+                        maxit       = 500)
+
+#print(wald(mod.us.nb))
+#print(summary.asreml(mod.us.nb)$varcomp)
+
+f=summary(mod.us.nb)$varcomp[1:10,1]
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- f
+corf=z/sqrt(diag(z)%*%t(diag(z)))
+#corf
+
+rownames(corf)=c(
+"BA",
+"HU",
+"SA",
+"TU")
+
+colnames(corf)=rownames(corf)
+
+#corf<- as_tibble(corf,rownames=NA)
+
+plotNB<-ggcorrplot(corf, colors = c("#6D9EC1", "white", "#E46726"),  
+           title = "                  Navy Beans",
+           show.legend = F,
+legend.title = "r" ,lab_size=5,tl.srt = 90,type = c("upper"), lab = T,digits = 4,
+outline.color = "white",pch.col = "white", tl.col = "blue",show.diag = FALSE)
+## genetic correlation: manual estimation
+corr.loc<-summary(mod.us.nb)$varcomp[2,1] /
+  sqrt(summary(mod.us.nb)$varcomp[1,1]*summary(mod.us.nb)$varcomp[3,1])
+#print(plotNB)
+
+mod.us.sr <- asreml(fixed = yield ~  loc + loc:rep ,
+                        random      = ~ name:us(loc) ,
+                        data        = blues_stage.I_SR,
+                        predict     = predict.asreml(classify = "name"),
+                        trace       = F,
+                        maxit       = 50000)
+
+#print(wald(mod.us.sr))
+#print(summary.asreml(mod.us.sr)$varcomp)
+
+f=summary(mod.us.sr)$varcomp[1:10,1]
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- f
+corf=z/sqrt(diag(z)%*%t(diag(z)))
+#corf
+
+rownames(corf)=c(
+"BA",
+"HU",
+"SA",
+"TU")
+
+colnames(corf)=rownames(corf)
+
+#corf<- as_tibble(corf,rownames=NA)
+
+plotSR<- ggcorrplot(corf, colors = c("#6D9EC1", "white", "#E46726"),  
+           title = "                    Small Red Beans", 
+           #show.legend = F, 
+legend.title = "Rge" ,lab_size=5,tl.srt = 90,type = c("upper"), lab = T,digits = 4,
+outline.color = "white",pch.col = "white", tl.col = "blue",show.diag = FALSE)
+## genetic correlation: manual estimation
+corr.loc<-summary(mod.us.sr)$varcomp[2,1] /
+  sqrt(summary(mod.us.sr)$varcomp[1,1]*summary(mod.us.sr)$varcomp[3,1])
+#print(plotSR)
+
+```
+
+
+```{r corr combined figure,  warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H"}
+
+arrange_ggplot(plotBB,plotNB, plotSR,ncol = 3)
+
+```
+
+
+
+## Analyzing MET - GGE 
+Genotype plus Genotype-vs-Environment interaction (GGE) model has been widely used to genotype evaluation and mega-environment identification in multi-environment trials (MET). This model considers a GGE (i.e., G + GE) biplot, which is constructed by the first two symmetrically scaled principal components (PC1 and PC2) derived from singular value decomposition of environment-centered MET data. The GGE biplot graphically displays G plus GE of a MET in a way that facilitates visual genotype evaluation and mega-environment identification [@yanGGEBiplotVs2007](GGE Biplot vs. AMMI Analysis of Genotype-by-Environment Data).
+
+### GGE biplot model
+The mean yield of genotype *i* in environment *j* is commonly described by a general linear model
+
+$$
+\hat y_{ij} + \mu + \alpha_i + \beta_j + \phi_{ij}
+$$
+where $\hat y_{ij}$ is the mean yield of genotype *i* in environment *j*, $i = 1, ... g; j = 1, ...e$ being *g* and *e*  the numbers of genotypes and environments, respectively; $\mu$ is the grand mean; $\alpha_i$ is the main effect of the genotype *i*; $\beta_j$ is the main effect of the environment *j*, and $\phi_{ij}$ is the interaction effect between genotype *i* and environment *j*. In the Genotype plus Genotype-vs-Environment interaction (GGE) model the $\alpha_i$ term is is deleted from the above model and then the environment-centered data matrix, $\phi_{ij}$, is subjected to SVD [@yanGGEBiplotAnalysis2003](GGE biplot analysis: a graphical tool for breeders, geneticists, and agronomists) and [@yanGGEBiplotVs2007](GGE Biplot vs. AMMI Analysis of Genotype-by-Environment Data). Explicitly, we have
+
+$$
+{\phi_{ij} =  \hat y_{ij}} - \mu - \beta_j  = \sum\limits_{k = 1}^p \xi_{ik}^*\eta_{jk}^*
+$$
+
+where $\xi_{ik}^* = \lambda_k^\alpha\xi_{ik}$; $\eta_{jk}^* = \lambda_k^{1-\alpha}\eta_{jk}$ being $\lambda_k$ the *k*th eigenvalue from the SVD ($k = 1, ...p$), with $p \le min(e, g)$; $\alpha$ is the the singular value partition factor for the Principal Component (PC) *k*; $\xi_{ik}^*$ and $\eta_{jk}^*$ are the PC scores for genotype *i* and environment *j*, respectively. 
+
+The function `gge()` from the R package `metan` [@olivotoMeanPerformanceStability2019](Olivoto et al., 2019a) according to [@yanGGEBiplotAnalysis2003](GGE biplot analysis: a graphical tool for breeders, geneticists, and agronomists) was deployed to produce the GGE model in this study. 
+
+
+## WAASB index
+
+The function `waasb()` function computes the Weighted Average of the Absolute Scores considering all possible IPCA from the Singular Value Decomposition of the BLUPs for genotype-vs-environment interaction effects obtained by an Linear Mixed-effect Model [@olivotoMeanPerformanceStability2019](Olivoto et al., 2019a), as follows:
+
+$$
+        WAASB_i  = 
+        \sum_{k = 1}^{p} |IPCA_{ik} \times EP_k|/ \sum_{k = 1}^{p}EP_k
+$$
+
+where $WAASB_i$ is the weighted average of absolute scores of the *i*th genotype; $IPCA_{ik}$ is the scores of the *i*th genotype in the *k*th IPCA; and $EP_k$ is the explained variance of the *k*th PCA for $k = 1,2,..,p$, $p = min(g-1; e-1)$.
+
+
+## WAASBY index
+
+- Simultaneous selection for mean performance and stability
+
+The **waasby** index is used for genotype ranking considering both the stability (**waasb**) and mean performance (**y**) based on the following model [@olivotoMeanPerformanceStability2019](Olivoto et al., 2019a).
+
+$$
+waasby_i = \frac{{\left( {r {Y_i} \times {\theta _Y}} \right) + \left( {r {W_i} \times {\theta _W}} \right)}}{{{\theta _Y} + {\theta _W}}}
+$$
+
+where $waasby_i$ is the superiority index for the *i*-th genotype; $rY_i$ and $rW_i$ are the rescaled values (0-100) for the response variable (y) and the stability (WAAS or WAASB), respectively;  $\theta _Y$ and $\theta_W$ are the weights for mean performance and stability, respectively.
+
+
+
+
+
+
+
