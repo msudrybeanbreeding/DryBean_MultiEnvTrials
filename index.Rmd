@@ -96,7 +96,7 @@ It has six main sections: The first contains the Supplemental Tables; the second
 
 introduce the metan (multienvironment
 trials analysis) R package reproducing the examples shown in the manuscript
-using the oat dataset.
+using the oat dataset. 
 
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, results='asis'}
