@@ -68,7 +68,7 @@ nocite: '@*'
 
 ```{r directory, message=TRUE, warning=FALSE, include=FALSE}
 # Setting up the working directory {-} 
-rm(list=ls()) 
+rm(list=ls())  
 
 my.path <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(my.path)
