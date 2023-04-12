@@ -8,6 +8,8 @@ This is the supplemental material for the manuscript **A retrospective
 analysis of historical data from multi-environment trial evaluation for
 dry bean** *(Phaseolus vulgaris)* **in Michigan.**
 
+> Developed and maintained by [Dr. Leonardo Volpato](https://github.com/volpatoo)
+
 It has six main sections: 
 
 - 1) Supplemental Tables;
