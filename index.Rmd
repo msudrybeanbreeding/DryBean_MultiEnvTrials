@@ -506,7 +506,7 @@ cat("\n\n\\pagebreak\n")
 # Appendix B - Supplementary Figures
 
 
-```{r weather data1, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S1: Box plot distribuation from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting."}
+```{r weather data1, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S1: Box plot distribuation from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -538,7 +538,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r weather data2, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S2: Box plot distribuation from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting."}
+```{r weather data2, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S2: Box plot distribuation from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -568,7 +568,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot1, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplementary Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
+```{r plot_ggstatsplot1, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplementary Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Small Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "Plot_dist_GY.png"))
