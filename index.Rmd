@@ -85,18 +85,21 @@ fast <- FALSE  # Make this false to skip the chunks
 ```
 
 
+This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
+
+The supplementary material is divided into six main sections:
+
+1. The first section includes the Supplemental Tables.
+2. The second section includes the Supplemental Figures.
+3. The third section provides the R code needed to reproduce the descriptive analysis and methods presented in this manuscript.
+4. The fourth section offers the R code to replicate the Multi-Environment Trials (MET) analysis.
+5. The fifth section contains the R code for reproducing the Multi-Trait Multi-Environment analysis.
+6. The sixth and final section lists the references and literature cited throughout this manuscript.  
+
+
 ```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
 cat("\n\n\\pagebreak\n")
 ```
-
-
-This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
-
-It has six main sections: The first contains the Supplemental Tables; the second contains the Supplemental Figures; the third section contains the R code to reproduce the descriptive analysis and methods of this manuscript; section fourth contains the R code for reproducing the MET analysis (Multi Environmental Trials); section fifth contains the R code for reproducing the Multi-Trait Multi-Environmental analysis, while section sixth contains the references and literature cited in this manuscript.   
-
-introduce the metan (multienvironment
-trials analysis) R package reproducing the examples shown in the manuscript
-using the oat dataset. 
 
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, results='asis'}
