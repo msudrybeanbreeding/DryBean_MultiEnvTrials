@@ -2,7 +2,7 @@
 !!!! IMPORTANT: run `source("utils/render.R")` to publish instead of clicking on 'Knit'
 -->
 
-## About this manuscript
+## About this repository
 
 This is the supplemental material for the manuscript **A retrospective
 analysis of historical data from multi-environment trial evaluation for
@@ -29,10 +29,10 @@ manuscript;
 
 | Mkt class | Genotype | Rep. | Loc | Year |
 |:---------:|:--------:|:----:|:---:|:----:|
-|    BB     |    71    |  4   |  4  |  6   |
-|    NB     |    70    |  4   |  4  |  6   |
+|    BB     |    72    |  4   |  4  |  6   |
+|    NB     |    71    |  4   |  4  |  6   |
 |    SR     |    21    |  4   |  4  |  6   |
-|   TOTAL   |   162    |  4   |  4  |  6   |
+|   TOTAL   |   164    |  4   |  4  |  6   |
 
 
 This Supplementary Materials was done using the template available at: [Reality Bending Lab (ReBeL)](https://github.com/RealityBending/TemplateResults)
