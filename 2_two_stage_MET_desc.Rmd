@@ -365,7 +365,7 @@ print(plotDM_stats_mkt_loc)
 #### Phenotypic variance components 
 
 
-```{r coincidence geno1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.pos="H", fig.align="center", dpi = 600, out.width="100%", fig.cap="Proportion of the phenotypic variance for three dry beans traits evaluated across three locations. GY1, grain yield from 2017 to 2021; GY2, grain yield only in 2021; DM, days to maturity; PH, plant height; LD, lodging."}
+```{r coincidence geno1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.pos="H", fig.align="center", dpi = 600, out.width="100%", fig.cap="Proportion of the phenotypic variance for three dry beans traits evaluated across three locations. GY1, grain yield from 2017 to 2022; GY2, grain yield only in 2021; DM, days to maturity; PH, plant height; LD, lodging."}
 
 
 data_beans_var = read.csv("data/VarStack.csv",h=T, stringsAsFactors = T)

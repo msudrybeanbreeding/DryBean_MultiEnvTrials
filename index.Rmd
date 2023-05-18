@@ -1,5 +1,5 @@
 ---
-title: "A retrospective analysis of historical data from multi-environment trial evaluation for dry bean (*Phaseolus vulgaris*) in Michigan"
+title: "A retrospective analysis of historical data from multi-environment trial evaluation for dry bean (*Phaseolus vulgaris* L.) in Michigan"
 #author: "Written by: Leonardo Volpato"
 date: "Last compiled on `r format(Sys.time(), '%d %B, %Y')`"
 subtitle: "Leonardo Volpato, Francisco E. Gomez, Evan Wright, and Scott Bales"
@@ -90,7 +90,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** *(Phaseolus vulgaris)* **in Michigan.**
+This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
 
 It has six main sections: The first contains the Supplemental Tables; the second contains the Supplemental Figures; the third section contains the R code to reproduce the descriptive analysis and methods of this manuscript; section fourth contains the R code for reproducing the MET analysis (Multi Environmental Trials); section fifth contains the R code for reproducing the Multi-Trait Multi-Environmental analysis, while section sixth contains the references and literature cited in this manuscript.   
 
@@ -187,7 +187,7 @@ data_beans_S1<- data_beans_S1 %>%
 if (knitr::is_html_output()) {
 
 #print_table(data_beans) #If the user prefer to use the render table from DT R package.
-print_table(data_beans_S1, caption = "Supplementary Table S1: Code, commercial names, market class, release year, yield and maturity range observed in the trials of the dry beans cultivars used in the study.")
+print_table(data_beans_S1, caption = "Supplementary Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study. NA = Missing values")
 
 # flextable(data_beans_S1) %>%
 #   autofit() 
@@ -196,7 +196,8 @@ print_table(data_beans_S1, caption = "Supplementary Table S1: Code, commercial n
 
 kable(data_beans_S1, align = "c", booktabs = T, format = "latex", 
       linesep = "", longtable = TRUE,
-       caption = "Supplementary Table S1: Code, commercial names, market class, release year, yield and maturity range observed in the trials of the dry beans cultivars used in the study.") %>%
+       caption = "Supplementary Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study.") %>%
+      footnote(general = "NA = Missing values", threeparttable = TRUE, fixed_small_size = TRUE) %>%
 kable_styling(latex_options = c("striped", "hold_position"), font_size = 8)
 }
 
@@ -214,12 +215,12 @@ data_beans_S2 = read.csv("data/SupplTableS2_v4.csv",h=T, stringsAsFactors = T)
 
 if (knitr::is_html_output()) {
   
-print_table(data_beans_S2, caption = "Supplementary Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error")
+print_table(data_beans_S2, caption = "Supplementary Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values")
 
 } else {
 kable(data_beans_S2, align = "c", booktabs = T, format = "latex", linesep = "", escape = FALSE,
       caption = "Supplementary Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021), days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study.") %>% 
-      footnote(general = "* Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error", threeparttable = TRUE, fixed_small_size = TRUE) %>% 
+      footnote(general = "* Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values", threeparttable = TRUE, fixed_small_size = TRUE) %>% 
       row_spec(c(9,18), hline_after = T) %>%
 kable_styling(latex_options = c("striped", "hold_position"),font_size = 8)
 
