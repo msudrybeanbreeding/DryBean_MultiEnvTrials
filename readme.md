@@ -10,6 +10,8 @@ dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
 
 [![DOI](https://zenodo.org/badge/620052137.svg)](https://zenodo.org/badge/latestdoi/620052137)
 
+> Developed and maintained by [Dr. Leonardo Volpato](https://github.com/volpatoo)
+
 It has six main sections: 
 
 - 1) Supplemental Tables;
