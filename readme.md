@@ -6,7 +6,7 @@
 
 This is the supplemental material for the manuscript **A retrospective
 analysis of historical data from multi-environment trial evaluation for
-dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
+dry bean** (*Phaseolus vulgaris* L.) **in Michigan.** 
 
 [![DOI](https://zenodo.org/badge/620052137.svg)](https://zenodo.org/badge/latestdoi/620052137)
 
