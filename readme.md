@@ -10,9 +10,6 @@ dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
 
 [![DOI](https://zenodo.org/badge/620052137.svg)](https://zenodo.org/badge/latestdoi/620052137)
 
-word_and_pdf/SupplementaryMaterials.docx
-https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/blob/efdf3ae918dfc90c8fa26da16c3fb7e439aeab8b/word_and_pdf/SupplementaryMaterials.docx
-
 [![Website](https://img.shields.io/badge/visit-website-E91E63)](https://msudrybeanbreeding.github.io/DryBean_MultiEnvTrials/)
 [![Website](https://img.shields.io/badge/download-.docx-FF5722)](https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/raw/main/word_and_pdf/SupplementaryMaterials.docx)
 [![Website](https://img.shields.io/badge/see-.pdf-FF9800)](https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/raw/main/word_and_pdf/SupplementaryMaterials_v1.pdf)
