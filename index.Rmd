@@ -679,7 +679,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplementary Figure S11: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
+```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplementary Figure S10: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
 
 knitr::include_graphics(here::here("main-figures", "CI_blups.png"))
 
@@ -693,7 +693,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S10: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, the ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same from those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
+```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S11: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, the ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same from those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
 
 knitr::include_graphics(here::here("main-figures", "waasb_ratio_new.png"))
 
