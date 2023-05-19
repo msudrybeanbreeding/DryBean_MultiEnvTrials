@@ -85,6 +85,17 @@ fast <- FALSE  # Make this false to skip the chunks
 ```
 
 
+```{r badges, echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+
+if (!knitr::is_latex_output() && knitr::is_html_output()) {
+  cat(
+  "[![Website](https://img.shields.io/badge/visit-website-E91E63)](https://msudrybeanbreeding.github.io/DryBean_MultiEnvTrials/)
+[![Website](https://img.shields.io/badge/download-.docx-FF5722)](https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/raw/main/word_and_pdf/SupplementaryMaterials.docx)
+[![Website](https://img.shields.io/badge/see-.pdf-FF9800)](https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/raw/main/word_and_pdf/SupplementaryMaterials_v1.pdf)")
+}
+```
+
+
 This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
 
 The supplementary material is divided into six main sections:
@@ -731,17 +742,6 @@ cat("\n\n\\pagebreak\n")
 # Appendix C - R codes
 
 # Getting started {.unnumbered}
-
-```{r badges, echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
-
-if (!knitr::is_latex_output() && knitr::is_html_output()) {
-  cat(
-  "[![Website](https://img.shields.io/badge/repo-Readme-2196F3)](https://github.com/volpatoo/Beans_MET)
-   [![Website](https://img.shields.io/badge/visit-website-E91E63)](https://github.com/volpatoo/MSUBeans_MultEnv/)
-   [![Website](https://img.shields.io/badge/download-.docx-FF5722)](https://github.com/volpatoo/Beans_MET/blob/5675304ca39c61f685a128399c8737d08d4b89dc/word_and_pdf/SupplementaryMaterials.docx)
-   [![Website] (https://img.shields.io/badge/see-.pdf-FF9800)](https://github.com/volpatoo/Beans_MET/blob/5675304ca39c61f685a128399c8737d08d4b89dc/word_and_pdf/SupplementaryMaterials_v1.pdf)")
-}
-```
 
 The present analysis aims to dissect the genotype by environment interaction study (aka GEI) using a data set from the Dry Beans breeding program at Michigan State University - MSU.
 
