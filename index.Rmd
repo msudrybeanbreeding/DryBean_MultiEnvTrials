@@ -98,7 +98,7 @@ if (!knitr::is_latex_output() && knitr::is_html_output()) {
 
 This is the supplemental material for the manuscript **A retrospective analysis of historical data from multi-environment trial evaluation for dry bean** (*Phaseolus vulgaris* L.) **in Michigan.**
 
-The supplementary material is divided into six main sections:
+The Supplemental material is divided into six main sections:
 
 1. The first section includes the Supplemental Tables.
 2. The second section includes the Supplemental Figures.
@@ -186,7 +186,7 @@ data_beans <- data.table(data_beans)
 ```
 
 
-# Appendix A - Supplementary Tables
+# Appendix A - Supplemental Tables
 
 
 ```{r loading data S1, echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
@@ -201,7 +201,7 @@ data_beans_S1<- data_beans_S1 %>%
 if (knitr::is_html_output()) {
 
 #print_table(data_beans) #If the user prefer to use the render table from DT R package.
-print_table(data_beans_S1, caption = "Supplementary Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study. NA = Missing values")
+print_table(data_beans_S1, caption = "Supplemental Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study. NA = Missing values")
 
 # flextable(data_beans_S1) %>%
 #   autofit() 
@@ -210,7 +210,7 @@ print_table(data_beans_S1, caption = "Supplementary Table S1: Commercial names (
 
 kable(data_beans_S1, align = "c", booktabs = T, format = "latex", 
       linesep = "", longtable = TRUE,
-       caption = "Supplementary Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study.") %>%
+       caption = "Supplemental Table S1: Commercial names (ComName), code, market class (MktCl), source, release year (RelYear), yield (RangeYield) and maturity (RangeMat) range observed in the Michigan Dry Bean Performance Trials analyzed in the study.") %>%
       footnote(general = "NA = Missing values", threeparttable = TRUE, fixed_small_size = TRUE) %>%
 kable_styling(latex_options = c("striped", "hold_position"), font_size = 8)
 }
@@ -229,11 +229,11 @@ data_beans_S2 = read.csv("data/SupplTableS2_v4.csv",h=T, stringsAsFactors = T)
 
 if (knitr::is_html_output()) {
   
-print_table(data_beans_S2, caption = "Supplementary Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values")
+print_table(data_beans_S2, caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values")
 
 } else {
 kable(data_beans_S2, align = "c", booktabs = T, format = "latex", linesep = "", escape = FALSE,
-      caption = "Supplementary Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021), days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study.") %>% 
+      caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021), days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study.") %>% 
       footnote(general = "* Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. ‡ Vg, Vge and Vr, variance components for genotype, interaction, and residuals, respectively. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values", threeparttable = TRUE, fixed_small_size = TRUE) %>% 
       row_spec(c(9,18), hline_after = T) %>%
 kable_styling(latex_options = c("striped", "hold_position"),font_size = 8)
@@ -247,7 +247,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-Supplementary Table S3: Estimated variance components and genetic parameters for grain yield (GY), days to maturity (DM), plant height (PH) and lodging (LD) for 37 Black, 37 Navy and 14 Red Small beans genotypes evaluated in BA, SA, and TU environments during 2021 growing season only.
+Supplemental Table S3: Estimated variance components and genetic parameters for grain yield (GY), days to maturity (DM), plant height (PH) and lodging (LD) for 37 Black, 37 Navy and 14 Red Small beans genotypes evaluated in BA, SA, and TU environments during 2021 growing season only.
 
 **Black Beans**
 
@@ -322,12 +322,12 @@ colnames(sel_SD_BB) = c('Geno','BLUPs','Overhall','SD (%)','WAASB','Overhall','S
 
 if (knitr::is_html_output()) {
   
-  print_table(sel_SD_BB, caption = "Supplementary Table S4: Selection differential of selected genotypes for mean performance and stability (WAASB index) at black beans. Selected genotypes:  B14, B19, B21, B22, B25, B26, B51, B52, B53, B10, B17, B23, B61, B63, B66, B68, B2, B40, B46, B70, B24, B27, B30, B33, B60, B7.") 
+  print_table(sel_SD_BB, caption = "Supplemental Table S4: Selection differential of selected genotypes for mean performance and stability (WAASB index) at black beans. Selected genotypes:  B14, B19, B21, B22, B25, B26, B51, B52, B53, B10, B17, B23, B61, B63, B66, B68, B2, B40, B46, B70, B24, B27, B30, B33, B60, B7.") 
   
 } else{
   
 kable(sel_SD_BB, align = "c", booktabs = T, format = "latex", linesep = "", 
-      caption = "Supplementary Table S4: Selection differential of selected genotypes for mean performance and stability (WAASB index) at black beans. Selected genotypes:  B14, B19, B21, B22, B25, B26, B51, B52, B53, B10, B17, B23, B61, B63, B66, B68, B2, B40, B46, B70, B24, B27, B30, B33, B60, B7.") %>% 
+      caption = "Supplemental Table S4: Selection differential of selected genotypes for mean performance and stability (WAASB index) at black beans. Selected genotypes:  B14, B19, B21, B22, B25, B26, B51, B52, B53, B10, B17, B23, B61, B63, B66, B68, B2, B40, B46, B70, B24, B27, B30, B33, B60, B7.") %>% 
          add_header_above(c(" "=1, "Mean performance" = 3, "Stability (WAASB)" = 3)) %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 10)
 
@@ -356,7 +356,7 @@ if (knitr::is_html_output()) {
   
 }else{
 
-kable(sel_SD_NB, align = "c", booktabs = T, format = "latex", linesep = "", caption = "Supplementary Table S 5: Selection differential of selected genotypes for mean performance and stability (WAASB index) at navy beans. Selected genotypes: N37, N39, N41, N58, N64, N10, N21, N33, N3, N57, N68, N54, N69, N70, N23, N4, N44, N47, N5, N6, N60, N7, N27, N29, N59.") %>% 
+kable(sel_SD_NB, align = "c", booktabs = T, format = "latex", linesep = "", caption = "Supplemental Table S 5: Selection differential of selected genotypes for mean performance and stability (WAASB index) at navy beans. Selected genotypes: N37, N39, N41, N58, N64, N10, N21, N33, N3, N57, N68, N54, N69, N70, N23, N4, N44, N47, N5, N6, N60, N7, N27, N29, N59.") %>% 
          add_header_above(c(" "=1, "Mean performance" = 3, "Stability (WAASB)" = 3)) %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 10)
 
@@ -380,12 +380,12 @@ colnames(sel_SD_SR) = c('Geno','BLUPs','Overhall','SD (%)','WAASB','Overhall','S
 
 if (knitr::is_html_output()) {
   
-  print_table(sel_SD_SR, caption = "Supplementary Table S6: Selection differential of selected genotypes for mean performance and stability (WAASB index) at red beans. Selected genotypes:R10, R13, R18, R1, R2, R21, R11.")
+  print_table(sel_SD_SR, caption = "Supplemental Table S6: Selection differential of selected genotypes for mean performance and stability (WAASB index) at red beans. Selected genotypes:R10, R13, R18, R1, R2, R21, R11.")
   
 }else{
 
 kable(sel_SD_SR, align = "c", booktabs = T, format = "latex", linesep = "",
-      caption = "Supplementary Table S6: Selection differential of selected genotypes for mean performance and stability (WAASB index) at red beans. Selected genotypes:R10, R13, R18, R1, R2, R21, R11.") %>% 
+      caption = "Supplemental Table S6: Selection differential of selected genotypes for mean performance and stability (WAASB index) at red beans. Selected genotypes:R10, R13, R18, R1, R2, R21, R11.") %>% 
          add_header_above(c(" "=1, "Mean performance" = 3, "Stability (WAASB)" = 3)) %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 10)
 }
@@ -407,12 +407,12 @@ blups_BB[, -1] <- round(blups_BB[, -1], 2)
 
 if (knitr::is_html_output()) {
   
-  print_table(blups_BB, caption = "Supplementary Table S7: BLUP-based indexes for selecting genotypes with performance and stability at black beans")
+  print_table(blups_BB, caption = "Supplemental Table S7: BLUP-based indexes for selecting genotypes with performance and stability at black beans")
   
 }else{
 
 kable(blups_BB, align = "c", booktabs = T, format = "latex", linesep = "",longtable = T,
-      caption = "Supplementary Table S7: BLUP-based indexes for selecting genotypes with performance and stability at black beans.") %>% 
+      caption = "Supplemental Table S7: BLUP-based indexes for selecting genotypes with performance and stability at black beans.") %>% 
          kable_styling(latex_options = c("striped", "hold_position"), font_size = 6)
 
 }
@@ -434,12 +434,12 @@ blups_NB[, -1] <- round(blups_NB[, -1], 2)
 
 if (knitr::is_html_output()) {
   
-  print_table(blups_NB, caption = "Supplementary Table S8: BLUP-based indexes for selecting genotypes with performance and stability at navy beans.")
+  print_table(blups_NB, caption = "Supplemental Table S8: BLUP-based indexes for selecting genotypes with performance and stability at navy beans.")
   
 }else{
 
 kable(blups_NB, align = "c", booktabs = T, format = "latex", linesep = "",longtable = T,
-      caption = "Supplementary Table S8: BLUP-based indexes for selecting genotypes with performance and stability at navy beans.") %>% 
+      caption = "Supplemental Table S8: BLUP-based indexes for selecting genotypes with performance and stability at navy beans.") %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 6)
 
 }
@@ -461,12 +461,12 @@ blups_SR[, -1] <- round(blups_SR[, -1], 2)
 
 if (knitr::is_html_output()) {
   
-print_table(blups_SR, caption = "Supplementary Table S9: BLUP-based indexes for selecting genotypes with performance and stability at red beans.")
+print_table(blups_SR, caption = "Supplemental Table S9: BLUP-based indexes for selecting genotypes with performance and stability at red beans.")
   
 }else{
   
 kable(blups_SR, align = "c", booktabs = T, format = "latex", linesep = "",longtable = T,
-      caption = "Supplementary Table S9: BLUP-based indexes for selecting genotypes with performance and stability at red beans.") %>% 
+      caption = "Supplemental Table S9: BLUP-based indexes for selecting genotypes with performance and stability at red beans.") %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 6)
 
 }
@@ -481,7 +481,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-Supplementary Table S10: Selection differential of the WAASBY index for 27 Black, 29 Nayv and 12 Red beans.
+Supplemental Table S10: Selection differential of the WAASBY index for 27 Black, 29 Nayv and 12 Red beans.
 
 **Black Beans**
 
@@ -518,10 +518,10 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-# Appendix B - Supplementary Figures
+# Appendix B - Supplemental Figures
 
 
-```{r weather data1, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S1: Box plot distribuation from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
+```{r weather data1, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S1: Box plot distribuation from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -553,7 +553,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r weather data2, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplementary Figure S2: Box plot distribuation from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
+```{r weather data2, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S2: Box plot distribuation from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -583,7 +583,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot1, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplementary Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Small Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
+```{r plot_ggstatsplot1, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Small Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "Plot_dist_GY.png"))
@@ -593,7 +593,7 @@ knitr::include_graphics(here::here("main-figures", "Plot_dist_GY.png"))
 
 
 
-```{r TDscatter, eval=FALSE, fig.align="center", fig.cap="Supplementary Figure S0: Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for GY in each location.", fig.heiht=figheight, fig.pos="H", fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, include=FALSE, out.width="100%"}
+```{r TDscatter, eval=FALSE, fig.align="center", fig.cap="Supplemental Figure S0: Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for GY in each location.", fig.heiht=figheight, fig.pos="H", fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, include=FALSE, out.width="100%"}
 
 dropsTD <- statgenSTA::createTD(data = data_beans, genotype = "name", trial = "loc")
 options("statgen.genoColors" = c("black", "blue", "red"))
@@ -608,7 +608,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot_met_fig, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplementary Figure S4: Combination of box and violin plots along with jittered data points and grand mean values for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Small Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola. Pairwise Games-Howell test used. Comparisons showing only significant between the pairs of environments"}
+```{r plot_ggstatsplot_met_fig, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S4: Combination of box and violin plots along with jittered data points and grand mean values for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Small Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola. Pairwise Games-Howell test used. Comparisons showing only significant between the pairs of environments"}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "Boxviolin_blues.png"))
@@ -620,7 +620,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r selected geno bb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S5:Proportion of the phenotypic variance for 71 Black (BB), 72 Navy (NB), and 21 Red (SR) beans for grain yield in Kg/ha (GY: 2017 - 2022; GY2: only 2021) days to maturity (DM, days), plant height (PH, cm) and lodging (LD,scale) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant."}
+```{r selected geno bb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S5:Proportion of the phenotypic variance for 71 Black (BB), 72 Navy (NB), and 21 Red (SR) beans for grain yield in Kg/ha (GY: 2017 - 2022; GY2: only 2021) days to maturity (DM, days), plant height (PH, cm) and lodging (LD,scale) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant."}
 
 knitr::include_graphics(here::here("main-figures", "Rplot_VarCompFinal.png"))
 
@@ -633,7 +633,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot2, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplementary Figure S6: Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations"}
+```{r plot_ggstatsplot2, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S6: Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations"}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "BLUES_means.png"))
@@ -648,7 +648,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno bb2, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S7:Mean performance (a) and stability (b) for grain yield (GY) of 72 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r selected geno bb2, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S7:Mean performance (a) and stability (b) for grain yield (GY) of 72 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_BB.png"))
 
@@ -662,7 +662,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno nb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S8: Mean performance (a) and stability (b) for grain yield (GY) of 71 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r selected geno nb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S8: Mean performance (a) and stability (b) for grain yield (GY) of 71 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_NB.png"))
 
@@ -676,7 +676,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno sr, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S9: Mean performance (a) and stability (b) for grain yield (GY) of 21 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r selected geno sr, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S9: Mean performance (a) and stability (b) for grain yield (GY) of 21 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_SR.png"))
 
@@ -690,7 +690,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplementary Figure S10: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
+```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplemental Figure S10: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
 
 knitr::include_graphics(here::here("main-figures", "CI_blups.png"))
 
@@ -704,7 +704,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplementary Figure S11: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, the ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same from those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
+```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S11: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, the ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same from those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
 
 knitr::include_graphics(here::here("main-figures", "waasb_ratio_new.png"))
 
