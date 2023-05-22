@@ -8,7 +8,8 @@ This is the supplemental material for the manuscript **A retrospective
 analysis of historical data from multi-environment trial evaluation for
 dry bean** (*Phaseolus vulgaris* L.) **in Michigan.** 
 
-[![DOI](https://zenodo.org/badge/620052137.svg)](https://zenodo.org/badge/latestdoi/620052137)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7957965.svg)](https://doi.org/10.5281/zenodo.7957965)
+
 
 [![Website](https://img.shields.io/badge/visit-website-E91E63)](https://msudrybeanbreeding.github.io/DryBean_MultiEnvTrials/)
 [![Website](https://img.shields.io/badge/download-.docx-FF5722)](https://github.com/msudrybeanbreeding/DryBean_MultiEnvTrials/raw/main/word_and_pdf/SupplementaryMaterials.docx)
