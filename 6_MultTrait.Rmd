@@ -4,10 +4,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Descriptive Stats - Multi-trait data {.tabset} 
-
-- GY data set: were obtained from the adjusted data in the 2nd-stage mixed models analysis.
-- PH, PM, and LD were obtained from the coincident locations (TU, BA and SA) in 2021 only.
 
 ### Data set
 
@@ -40,7 +36,7 @@ data_beans_compl_count
 
 ### Box plot distribuation 
 
-```{r warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Box Plot for grain yield (GY), date of maturity (DM), Plant height (PH), and Lodging (LD) across environment"}
+```{r warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Box Plot for grain yield (GY), date of maturity (DM), Plant height (PH), and Lodging (LD) across environment"}
 
 ## Data visualization
 
@@ -92,7 +88,7 @@ arrange_ggplot(c,a,b,d)
 
 ### Scatter plot distribuation GY 
 
-```{r TDscatter gy, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for DM in each location."}
+```{r TDscatter gy, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for DM in each location."}
 
 
 dropsTD <- statgenSTA::createTD(data = data_beans_compl, genotype = "name", trial = "loc")
@@ -107,7 +103,7 @@ plot(dropsTD, plotType = "scatter", traits = "GY", colorGenoBy = "mkt",
 
 ### Scatter plot distribuation DM 
 
-```{r TDscatter dm, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for days of maturity (DM). The diagonal shows the distribution and the bottom left shows the scatter points for DM in each location."}
+```{r TDscatter dm, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for days of maturity (DM). The diagonal shows the distribution and the bottom left shows the scatter points for DM in each location."}
 
 
 dropsTD <- statgenSTA::createTD(data = data_beans_compl, genotype = "name", trial = "loc")
@@ -121,7 +117,7 @@ plot(dropsTD, plotType = "scatter", traits = "DM", colorGenoBy = "mkt",
 
 ### Scatter plot distribuation PH 
 
-```{r TDscatter ph, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for plant height (PH). The diagonal shows the distribution and the bottom left shows the scatter points for PH in each location."}
+```{r TDscatter ph, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for plant height (PH). The diagonal shows the distribution and the bottom left shows the scatter points for PH in each location."}
 
 
  plot(dropsTD, plotType = "scatter", traits = "PH", colorGenoBy = "mkt", 
@@ -131,7 +127,7 @@ plot(dropsTD, plotType = "scatter", traits = "DM", colorGenoBy = "mkt",
 
 ### Scatter plot distribuation LD 
 
-```{r TDscatter ld, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for lodging (LD). The diagonal shows the distribution and the bottom left shows the scatter points for LD in each location."}
+```{r TDscatter ld, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos="H", warning=FALSE, dpi=600, fig.cap="Scatterplot matrix of trials for lodging (LD). The diagonal shows the distribution and the bottom left shows the scatter points for LD in each location."}
 
 
 plot(dropsTD, plotType = "scatter", traits = "LD", colorGenoBy = "mkt", 
@@ -143,7 +139,7 @@ plot(dropsTD, plotType = "scatter", traits = "LD", colorGenoBy = "mkt",
 
 ### Missing values
 
-```{r missing geno gy all traits, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", fig.pos="H", dpi = 600, fig.cap="Missing genotypes by market classes"}
+```{r missing geno gy all traits, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", fig.pos="H", dpi = 600, fig.cap="Missing genotypes by market classes"}
 
 #str(data_beans_compl)
 gg_miss_fct(data_beans_compl,fct = mkt)+ggtitle("Missing values (NA)") +
@@ -154,7 +150,7 @@ gg_miss_fct(data_beans_compl,fct = mkt)+ggtitle("Missing values (NA)") +
 
 ### Linear phenotypic correlation
 
-```{r corrbb1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Pearson’s linear correlation between the studied traits. The lower diagonal shows the scatter plot where the environments are mapped with diferent point colors (BA = green, SA = salmon, TU = cyan)"}
+```{r corrbb1, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Pearson’s linear correlation between the studied traits. The lower diagonal shows the scatter plot where the environments are mapped with diferent point colors (BA = green, SA = salmon, TU = cyan)"}
 
 corr_plot(data_beans_compl,
           col.by = loc, # Different color for each level of ENV
@@ -299,7 +295,7 @@ get_model_data(waasb_model_bb.1, "blupge") %>%
 - Varieties ranking based on the multi-trait stability index. Selected varieties are
 highlighted in red.
 
-```{r  warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
+```{r  warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
 # Get the random effects
 #get_model_data(waasb_model_bb.1, what = "ranef")  
 
@@ -385,7 +381,7 @@ waasb_sel_mean_PH <-
 
 
 #### Mean performance and stability for GY
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, GY, blups_sel_mean_GY$mean_GY)
 p2<- plot_selected(waasb_sel, GEN, GY, waasb_sel_mean_GY$mean_GY) + labs(y = "WAASB index")
@@ -399,7 +395,7 @@ arrange_ggplot(p1, p2,
 ```
 
 #### Mean performance and stability for DM
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, DM, blups_sel_mean_DM$mean_DM)
 p2<- plot_selected(waasb_sel, GEN, DM, waasb_sel_mean_DM$mean_DM) + labs(y = "WAASB index")
@@ -414,7 +410,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for PH
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, PH, blups_sel_mean_PH$mean_PH)
 p2<- plot_selected(waasb_sel, GEN, PH, waasb_sel_mean_PH$mean_PH) + labs(y = "WAASB index")
@@ -429,7 +425,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for LD
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 27 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, LD, blups_sel_mean_LD$mean_LD)
 p2<- plot_selected(waasb_sel, GEN, LD, waasb_sel_mean_LD$mean_LD) + labs(y = "WAASB index")
@@ -560,7 +556,7 @@ get_model_data(waasb_model_nb.1, "blupge") %>%
 - Varieties ranking based on the multi-trait stability index. Selected varieties are
 highlighted in red.
 
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
 # Get the random effects
 #get_model_data(waasb_model_nb.1, what = "ranef")  
 
@@ -647,7 +643,7 @@ waasb_sel_mean_PH <-
 
 
 #### Mean performance and stability for GY
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, GY, blups_sel_mean_GY$mean_GY)
 p2<- plot_selected(waasb_sel, GEN, GY, waasb_sel_mean_GY$mean_GY) + labs(y = "WAASB index")
@@ -661,7 +657,7 @@ arrange_ggplot(p1, p2,
 ```
 
 #### Mean performance and stability for DM
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, DM, blups_sel_mean_DM$mean_DM)
 p2<- plot_selected(waasb_sel, GEN, DM, waasb_sel_mean_DM$mean_DM) + labs(y = "WAASB index")
@@ -676,7 +672,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for PH
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, PH, blups_sel_mean_PH$mean_PH)
 p2<- plot_selected(waasb_sel, GEN, PH, waasb_sel_mean_PH$mean_PH) + labs(y = "WAASB index")
@@ -691,7 +687,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for LD
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 29 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, LD, blups_sel_mean_LD$mean_LD)
 p2<- plot_selected(waasb_sel, GEN, LD, waasb_sel_mean_LD$mean_LD) + labs(y = "WAASB index")
@@ -825,7 +821,7 @@ get_model_data(waasb_model_sr.1, "blupge") %>%
 - Varieties ranking based on the multi-trait stability index. Selected varieties are
 highlighted in red.
 
-```{r  warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
+```{r  warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Cultivars ranking based on the multi-trait stability index. Selected cultivars are highlighted in red."}
 # Get the random effects
 #get_model_data(waasb_model_sr.1, what = "ranef")  
 
@@ -911,7 +907,7 @@ waasb_sel_mean_PH <-
 
 
 #### Mean performance and stability for GY
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 12 red bens genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 12 red bens genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, GY, blups_sel_mean_GY$mean_GY)
 p2<- plot_selected(waasb_sel, GEN, GY, waasb_sel_mean_GY$mean_GY) + labs(y = "WAASB index")
@@ -925,7 +921,7 @@ arrange_ggplot(p1, p2,
 ```
 
 #### Mean performance and stability for DM
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for days of maturity (DM) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, DM, blups_sel_mean_DM$mean_DM)
 p2<- plot_selected(waasb_sel, GEN, DM, waasb_sel_mean_DM$mean_DM) + labs(y = "WAASB index")
@@ -940,7 +936,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for PH
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for plant height (PH) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, PH, blups_sel_mean_PH$mean_PH)
 p2<- plot_selected(waasb_sel, GEN, PH, waasb_sel_mean_PH$mean_PH) + labs(y = "WAASB index")
@@ -955,7 +951,7 @@ arrange_ggplot(p1, p2,
 
 
 #### Mean performance and stability for LD
-```{r warning=FALSE, fig.pos="H", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r warning=FALSE, fig.pos="H", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for lodging (LD) of 12 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 p1<- plot_selected(blups_sel, GEN, LD, blups_sel_mean_LD$mean_LD)
 p2<- plot_selected(waasb_sel, GEN, LD, waasb_sel_mean_LD$mean_LD) + labs(y = "WAASB index")
@@ -1017,7 +1013,7 @@ d2<- data.frame(summary.asreml(mod_MTME.bb)$varcomp)
 
 
 # results as data.table
-blup.mtme.bb<- data.table((mod_MTME.bb$predictions$pvals[1:6])) # set the BLUP 
+blup.mtme.bb<- as.data.frame((mod_MTME.bb$predictions$pvals[1:6])) # set the BLUP 
 
 
 # d1
@@ -1155,7 +1151,7 @@ d1<- data.frame(wald(mod_MTME.nb))
 d2<-data.frame(summary.asreml(mod_MTME.nb)$varcomp) 
 
 # results as data.table
-blup.mtme.nb<- data.table((mod_MTME.nb$predictions$pvals[1:6])) # set the BLUP
+blup.mtme.nb<- as.data.frame((mod_MTME.nb$predictions$pvals[1:6])) # set the BLUP
 
 
 # d1
@@ -1403,11 +1399,138 @@ d2<- data.frame(summary.asreml(mod_MTME.sr)$varcomp)
 
 ```
 
+
+
+### MTME COMBINED ANALYSIS - COMB_MKT
+
+-   BB, NB and SR combined genotypes
+-   3 Locations available: BA, SA and TU
+-   4 traits: GY, PH, LD and DM
+
+
+```{r warning=FALSE, message=FALSE, results='asis'}
+data_beans_all <- rbind(data_beans_BB, data_beans_NB, data_beans_SR)
+
+mod_MTME.all <- asreml(fixed  = cbind(GY, DM, PH, LD) ~ trait:rep + trait, # trait:rep -1,
+                      random =  ~ us(trait):name + us(trait):name:loc, #name:us(loc)
+                      #residuals =  ~dsum(~us(name)|loc),
+                      residuals = ~ units:us(trait),
+                      data = data_beans_all,
+                      trace = F,
+                      maxit = 10000,
+                      predict   = predict.asreml(classify = "name:loc:trait") )
+
+#update.asreml(mod_MTME.bb)
+d1<- data.frame(wald(mod_MTME.all))
+
+
+d2<- data.frame(summary.asreml(mod_MTME.all)$varcomp) 
+
+# > data.frame(summary.asreml(mod_MTME.all)$varcomp) 
+#                            component std.error z.ratio bound X.ch
+# trait:name!trait_GY:GY      0.237105    0.0485   4.886     P    0
+# trait:name!trait_DM:GY      0.102360    0.0404   2.531     P    0
+# trait:name!trait_DM:DM      0.300280    0.0612   4.905     P    0
+# trait:name!trait_PH:GY      0.094403    0.0348   2.714     P    0
+# trait:name!trait_PH:DM      0.073377    0.0373   1.968     P    0
+# trait:name!trait_PH:PH      0.171194    0.0434   3.946     P    0
+# trait:name!trait_LD:GY      0.027135    0.0417   0.651     P    0
+# trait:name!trait_LD:DM      0.098660    0.0462   2.138     P    0
+# trait:name!trait_LD:PH     -0.042950    0.0374  -1.148     P    0
+# trait:name!trait_LD:LD      0.269085    0.0607   4.430     P    0
+# trait:name:loc!trait_GY:GY  0.082926        NA      NA     B   NA
+# trait:name:loc!trait_DM:GY -0.000281        NA      NA     B   NA
+# trait:name:loc!trait_DM:DM  0.084023        NA      NA     B   NA
+# trait:name:loc!trait_PH:GY -0.002016        NA      NA     B   NA
+# trait:name:loc!trait_PH:DM -0.002670        NA      NA     B   NA
+# trait:name:loc!trait_PH:PH  0.087605        NA      NA     B   NA
+# trait:name:loc!trait_LD:GY  0.001092        NA      NA     B   NA
+# trait:name:loc!trait_LD:DM -0.002484        NA      NA     B   NA
+# trait:name:loc!trait_LD:PH  0.004115        NA      NA     B   NA
+# trait:name:loc!trait_LD:LD  0.074118        NA      NA     B   NA
+# units:trait!R               1.000000        NA      NA     F    0
+# units:trait!trait_GY:GY     0.658078    0.0316  20.836     P    0
+# units:trait!trait_DM:GY     0.056694    0.0238   2.381     P    0
+# units:trait!trait_DM:DM     0.603377    0.0317  19.027     P    0
+# units:trait!trait_PH:GY     0.151808    0.0267   5.678     P    0
+# units:trait!trait_PH:DM    -0.001821    0.0249  -0.073     P    0
+# units:trait!trait_PH:PH     0.751100    0.0392  19.154     P    0
+# units:trait!trait_LD:GY     0.050337    0.0265   1.900     P    0
+# units:trait!trait_LD:DM     0.087107    0.0251   3.465     P    0
+# units:trait!trait_LD:PH    -0.014251    0.0274  -0.519     P    0
+# units:trait!trait_LD:LD     0.677264    0.0368  18.393     P    0
+
+# results as data.table
+blup.mtme.all <- as.data.frame(matrix(unlist(mod_MTME.all$predictions$pvals[1:6]), ncol=6))
+
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+####SINGLE TRAIT (only to check the components values are correspondent these MTME)
+data_beans_all <- rbind(data_beans_BB, data_beans_NB, data_beans_SR)
+Mod_GY <- asreml(fixed  = GY ~ rep
+                 ,random = ~ name:loc + name
+                 ,data = data_beans_all
+                 ,maxiter=1000)
+
+data_beans_all <- rbind(data_beans_BB, data_beans_NB, data_beans_SR)
+Mod_DM <- asreml(fixed  = DM ~ rep
+                 ,random = ~ name:loc + name
+                 ,data = data_beans_all
+                 ,maxiter=1000)
+
+data_beans_all <- rbind(data_beans_BB, data_beans_NB, data_beans_SR)
+Mod_PH <- asreml(fixed  = PH ~ rep
+                 ,random = ~ name:loc + name
+                 ,data = data_beans_all
+                 ,maxiter=1000)
+
+data_beans_all <- rbind(data_beans_BB, data_beans_NB, data_beans_SR)
+Mod_LD <- asreml(fixed  = LD ~ rep
+                 ,random = ~ name:loc + name
+                 ,data = data_beans_all
+                 ,maxiter=1000)
+
+summary(Mod_GY)$varcomp
+summary(Mod_DM)$varcomp
+summary(Mod_PH)$varcomp
+summary(Mod_LD)$varcomp
+
+# > summary(Mod_GY)$varcomp
+#          component std.error z.ratio bound %ch
+# name        0.2375    0.0492    4.82     P   0
+# name:loc    0.0815    0.0275    2.96     P   0
+# units!R     0.6596    0.0332   19.86     P   0
+# > summary(Mod_DM)$varcomp
+#          component std.error z.ratio bound %ch
+# name        0.3049    0.0625    4.88     P   0
+# name:loc    0.0736    0.0285    2.58     P   0
+# units!R     0.6061    0.0332   18.25     P   0
+# > summary(Mod_PH)$varcomp
+#          component std.error z.ratio bound %ch
+# name        0.1877    0.0448    4.19     P   0
+# name:loc    0.0381    0.0297    1.28     P   0
+# units!R     0.7663    0.0421   18.22     P   0
+# > summary(Mod_LD)$varcomp
+#          component std.error z.ratio bound %ch
+# name       0.28738    0.0607   4.734     P 0.1
+# name:loc   0.00802    0.0245   0.328     P 0.0
+# units!R    0.70090    0.0403  17.397     P 0.0
+
+
+```
+
+
+
 ## MTME Var Comp and corr
+
+### Individual market bean class
 
 - Variance Component and correlations analysis
 
-```{r fig mtme corr, fig.pos="H", warning=FALSE, out.width="100%", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r fig mtme corr0, fig.pos="H", warning=FALSE, out.width="100%", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Genotypic correlation between GY, DPM, and PH across genotypes and locations for Black (BB) and Navy (NB) beans. The genotype (G) and genotype × environment interactions (GEI) correlation coefficients between the GY, DM, PH, and LD traits"}
 # Black
 #traits
 a=summary(mod_MTME.bb)$varcomp[1:10,1]
@@ -1546,32 +1669,167 @@ corr1 <- corr1 %>%
 branded_colors <- c("#00798c", "#d1495b", "#edae49",
                     "#66a182","#2e4057","#8d96a3")
 
+# ggplot(data=corr1, aes(x=names, y=corr, fill = names2)) +
+#   geom_bar(stat="identity", position=position_dodge())+
+#   geom_text(aes(label=mkt), vjust=-0.2, color="black",
+#             position = position_dodge(width = 1), size=4, fontface="bold")+
+#   scale_fill_brewer(palette="Paired")+
+#   theme_minimal() +
+#   theme(axis.text.x=element_blank(),
+#         strip.text=element_text(face="bold")) +
+#  scale_fill_manual(values=branded_colors) +
+# labs(caption=NULL, x=NULL, y="Rge", fill = 'Traits') +
+#   scale_y_continuous(limits=c(-0.8, 0.8), n.breaks = 10) + 
+#   geom_vline(xintercept = 12.47) +
+#   annotate(geom="text", x=6.6, y=0.8, label="G",size=5, fontface="bold",
+#            color="black") +
+#   annotate(geom="text", x=18.5, y=0.8, label="GxE",size=5, fontface="bold",
+#            color="black")
+
+ggplot(data = corr1, aes(x = names, y = corr, fill = names2, pattern = mkt)) +
+  geom_bar_pattern(
+    stat = "identity",
+    position = position_dodge(preserve = "single"),
+    pattern_density = 0.1,
+    pattern_spacing = 0.015,
+    pattern_angle = 45,
+    pattern_fill = "black",
+    color = "black"
+  ) +
+  scale_pattern_manual(values = c(BB = "none", NB = "stripe")) +
+  scale_fill_manual(values = branded_colors) +
+  scale_alpha_manual(values = c(1, 0.5)) + 
+  guides(alpha = FALSE) + 
+  theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),
+    strip.text = element_text(face = "bold")
+  ) +
+  labs(caption = NULL, x = NULL, y = "Rge", fill = 'Traits', pattern = "Market") +
+  scale_y_continuous(limits = c(-0.8, 0.8), n.breaks = 10) +
+  geom_vline(xintercept = 12.47) +
+  annotate(geom = "text", x = 6.6, y = 0.8, label = "G", size = 5, fontface = "bold", color = "black") +
+  annotate(geom = "text", x = 18.5, y = 0.8, label = "GxE", size = 5, fontface = "bold", color = "black") +
+    guides(pattern = guide_legend(override.aes = list(fill = "white")),
+         fill = guide_legend(override.aes = list(pattern = "none")))
+
+```
+
+
+### Combining all market classes
+
+```{r fig mtme corr1, fig.pos="H", warning=FALSE, out.width="100%", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Genotypic correlation between GY, DPM, and PH across genotypes and locations for all market classes. The genotype (G) and genotype × environment interactions (GEI) correlation coefficients between the GY, DM, PH, and LD traits."}
+
+#traits
+a=summary(mod_MTME.all)$varcomp[1:10,1]
+
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- a
+cora=z/sqrt(diag(z)%*%t(diag(z)))
+#cora
+
+#int traits - locations
+b=summary(mod_MTME.all)$varcomp[11:20,1]
+
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- b
+corb=z/sqrt(diag(z)%*%t(diag(z)))
+#corb
+
+
+corr=as.matrix(bdiag(cora,corb))
+
+rownames(corr)=c(
+  "Comb_MKT_GY",
+  "Comb_MKT_DM",
+  "Comb_MKT_PH",
+  "Comb_MKT_LD",
+  "Comb_MKT_Loc-GY",
+  "Comb_MKT_Loc-DM",
+  "Comb_MKT_Loc-PH",
+  "Comb_MKT_Loc-LD"
+)
+
+colnames(corr)=rownames(corr)
+
+corr1<- as_tibble(corr)
+
+corr1<- corr1 %>%
+  tidyr::pivot_longer(
+    cols = everything(),
+    names_to = "var",
+    values_to = "corr")
+
+corr1<-corr1 %>%
+  dplyr::filter(corr != 0) %>% 
+  dplyr::filter(corr != 1)
+
+names=c(
+  "G GY-DM_Comb_MKT", 
+  "G GY-PH_Comb_MKT",
+  "G GY-LD_Comb_MKT",
+  "G PH-DM_Comb_MKT",
+  "G DM-LD_Comb_MKT",
+  "G PH-LD_Comb_MKT",
+  "GxE GY-DM_Comb_MKT",
+  "GxE GY-PH_Comb_MKT",
+  "GxE GY-LD_Comb_MKT",
+  "GxE PH-DM_Comb_MKT",
+  "GxE DM-LD_Comb_MKT",
+  "GxE PH-LD_Comb_MKT"
+
+  )
+
+names2=c(
+  "GY-DM", 
+  "GY-PH",
+  "GY-LD",
+  "PH-DM",
+  "DM-LD",
+  "PH-LD",
+  
+  "GY-DM", 
+  "GY-PH",
+  "GY-LD",
+  "PH-DM",
+  "DM-LD",
+  "PH-LD"
+  
+
+  )
+
+corr1$names<-names
+corr1$names2<-names2
+
+# Create new_id using dplyr only
+corr1 <- corr1 %>% 
+  mutate(mkt = str_split(names, "_", simplify = TRUE)[ , 2])
+
+#str(corr1)
+branded_colors <- c("#00798c", "#d1495b", "#edae49",
+                    "#66a182","#2e4057","#8d96a3")
+
 ggplot(data=corr1, aes(x=names, y=corr, fill = names2)) +
   geom_bar(stat="identity", position=position_dodge())+
-  geom_text(aes(label=mkt), vjust=-0.2, color="black",
-            position = position_dodge(width = 1), size=4, fontface="bold")+
   scale_fill_brewer(palette="Paired")+
   theme_minimal() +
   theme(axis.text.x=element_blank(),
         strip.text=element_text(face="bold")) +
  scale_fill_manual(values=branded_colors) +
 labs(caption=NULL, x=NULL, y="Rge", fill = 'Traits') +
-  scale_y_continuous(limits=c(-0.8, 0.8), n.breaks = 10) + 
-  geom_vline(xintercept = 12.47) +
-  annotate(geom="text", x=6.6, y=0.8, label="G",size=5, fontface="bold",
+  scale_y_continuous( n.breaks = 10) + 
+  geom_vline(xintercept = 6.5) +
+  annotate(geom="text", x=3.3, y=0.55, label="G",size=5, fontface="bold",
            color="black") +
-  annotate(geom="text", x=18.5, y=0.8, label="GxE",size=5, fontface="bold",
+  annotate(geom="text", x=9.23, y=0.55, label="GxE",size=5, fontface="bold",
            color="black")
 
 ```
 
 
-
-
-
-
-
-
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
 
 
 

@@ -31,8 +31,8 @@ output:
     latex_engine: xelatex
 editor_options:
   chunk_output_type: console
-bibliography: utils/bibliography.bib
-csl: utils/apa.csl
+# bibliography: utils/bibliography.bib
+# csl: utils/apa.csl
 header-includes:
   \usepackage{float}
   \usepackage{booktabs}
@@ -115,39 +115,62 @@ cat("\n\n\\pagebreak\n")
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, results='asis'}
 #### Packages
-               library(asreml) # To run the Mixed-models analysis in loops and using COV structure       
-               library(asremlPlus)
-               library(metan) # To run the MET models
-               library(statgenGxE) # To run the MET models with ASREml 
-               library(DT)  # Used to make the tables
-               library(ggplot2)
-               library(dplyr)
-               library(data.table)
-               library(plyr)
-               library(raster)
-               library(tidyr)
-               library(maps)
-               library(mapdata)
-               library(tigris)
-               library(rcartocolor)
-               library(cowplot)
-               library(sf)
-               library(nadiv)
-               library(broom)
-               library(spData)
-               library(ggstatsplot)
-               library(cowplot) # used in this material to arrange the graphics
-               library(magrittr) # To use the forward-pipe operator %>%
-               library(kableExtra) # used in this material to make tables
-               library(flextable)
-               library(ggcorrplot)
-               library(naniar)
-               library(ggforce)
-               library(ggpmisc)
-               library(gridExtra)
-               library(openxlsx)
-               library(ggdist)
-               library(tidyquant)
+      library(rmarkdown)
+      library(ggpmisc)
+      library(ggpp)
+      library(gridExtra)
+      library(magrittr)
+      library(Matrix)
+      library(mapdata)
+      library(maps)
+      library(spData)
+      library(asremlPlus)
+      library(tidyquant)
+      library(usmap)
+      library(data.table)
+      library(ggspatial)
+      library(ggpattern)
+      library(viridisLite)
+      library(viridis)
+      library(flextable)
+      library(lubridate)
+      library(raster)
+      library(ggcorrplot)
+      library(ggdist)
+      library(tibble)
+      library(RColorBrewer)
+      library(rcartocolor)
+      library(metan)
+      library(ggstatsplot)
+      library(sp)
+      library(sf)
+      library(ggforce)
+      library(patchwork)
+      library(PerformanceAnalytics)
+      library(broom)
+      library(quantmod)
+      library(xts)
+      library(openxlsx)
+      library(asreml)
+      library(naniar)
+      library(TTR)
+      library(statgenGxE)
+      library(tigris)
+      library(plyr)
+      library(ggplot2)
+      library(stringr)
+      library(forcats)
+      library(tidyverse)
+      library(dplyr)
+      library(purrr)
+      library(readr)
+      library(tidyr)
+      library(cowplot)
+      library(nadiv)
+      library(DT)
+      library(zoo)
+      library(kableExtra)
+
 
 ```
 
@@ -229,11 +252,11 @@ data_beans_S2 = read.csv("data/SupplTableS2_v4.csv",h=T, stringsAsFactors = T)
 
 if (knitr::is_html_output()) {
   
-print_table(data_beans_S2, caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe.  § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values. TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations.")
+print_table(data_beans_S2, caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each location of the grain yield (GY: 2017 - 2022; GY2: only 2021) and days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe.  § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values. TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations.")
 
 } else {
 kable(data_beans_S2, align = "c", booktabs = T, format = "latex", linesep = "", escape = FALSE,
-      caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each locations of the grain yield (GY: 2017 - 2022; GY2: only 2021), days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study.") %>% 
+      caption = "Supplemental Table S2: Summary of the results for random- and fixed-effects and overall means for each location of the grain yield (GY: 2017 - 2022; GY2: only 2021), days to maturity (DM), plant height (PH) and lodging (LD) traits evaluated in the study.") %>% 
       footnote(general = "* Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant. † LRTg and LRTge, Likelihood ratio tests for genotype and interaction gxe. § E-MS and E/B-MS, mean squares for environment and and block-within-environment, respectively. ¶ Mean, grand mean; # Standart error. NA = Missing values. TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations.", threeparttable = TRUE, fixed_small_size = TRUE) %>% 
       row_spec(c(9,18), hline_after = T) %>%
 kable_styling(latex_options = c("striped", "hold_position"),font_size = 8)
@@ -356,7 +379,7 @@ if (knitr::is_html_output()) {
   
 }else{
 
-kable(sel_SD_NB, align = "c", booktabs = T, format = "latex", linesep = "", caption = "Supplemental Table S 5: Selection differential of selected genotypes for mean performance and stability (WAASB index) at navy beans. Selected genotypes: N37, N39, N41, N58, N64, N10, N21, N33, N3, N57, N68, N54, N69, N70, N23, N4, N44, N47, N5, N6, N60, N7, N27, N29, N59.") %>% 
+kable(sel_SD_NB, align = "c", booktabs = T, format = "latex", linesep = "", caption = "Supplemental Table S5: Selection differential of selected genotypes for mean performance and stability (WAASB index) at navy beans. Selected genotypes: N37, N39, N41, N58, N64, N10, N21, N33, N3, N57, N68, N54, N69, N70, N23, N4, N44, N47, N5, N6, N60, N7, N27, N29, N59.") %>% 
          add_header_above(c(" "=1, "Mean performance" = 3, "Stability (WAASB)" = 3)) %>% 
          kable_styling(latex_options = c("striped", "hold_position"),font_size = 10)
 
@@ -521,7 +544,7 @@ cat("\n\n\\pagebreak\n")
 # Appendix B - Supplemental Figures
 
 
-```{r weather data1, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S1: Box plot distribuation from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
+```{r weather data1, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S1: Box plot distribution from the weather data collected by location from 2017 to 2022 cultivation years. Data were scaled to better plot visualization. Weather data obtained using  daily average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -553,7 +576,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r weather data2, echo=FALSE, fig.align="center", fig.heiht=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S2: Box plot distribuation from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  dairly average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
+```{r weather data2, echo=FALSE, fig.align="center", fig.height=figheight, fig.width=figwidth, fig.pos= "H", out.width="100%", message=FALSE, warning=FALSE, dpi=600, fig.cap="Supplemental Figure S2: Box plot distribution from the weather data collected by year from 2017 to 2022 cultivation locations. Data were scaled to better plot visualization. Weather data obtained using  daily average value from planting to harvesting.TU: Tuscola, SA: Sanilac, HU: Huron, and BA: Bay locations."}
 
 data_beans_w = read.csv("data/Wdata_scale_beans.csv",h=T, stringsAsFactors = T)
 
@@ -583,7 +606,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot1, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Small Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
+```{r plot_ggstatsplot1, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S3: Combination of box and density plots for between subjects comparisons by locations (left) and year (right) of grain yield (GY in Kg/ha) for black (BB), Navy (NB) and Small Red (SR) beans. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations."}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "Plot_dist_GY.png"))
@@ -593,7 +616,7 @@ knitr::include_graphics(here::here("main-figures", "Plot_dist_GY.png"))
 
 
 
-```{r TDscatter, eval=FALSE, fig.align="center", fig.cap="Supplemental Figure S0: Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for GY in each location.", fig.heiht=figheight, fig.pos="H", fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, include=FALSE, out.width="100%"}
+```{r TDscatter, eval=FALSE, fig.align="center", fig.cap="Supplemental Figure S0: Scatterplot matrix of trials for grain yield (GY). The diagonal shows the distribution and the bottom left shows the scatter points for GY in each location.", fig.height=figheight, fig.pos="H", fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, include=FALSE, out.width="100%"}
 
 dropsTD <- statgenSTA::createTD(data = data_beans, genotype = "name", trial = "loc")
 options("statgen.genoColors" = c("black", "blue", "red"))
@@ -608,19 +631,7 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot_met_fig, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S4: Combination of box and violin plots along with jittered data points and grand mean values for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Small Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola. Pairwise Games-Howell test used. Comparisons showing only significant between the pairs of environments"}
-
-## Figure showing the results corrected across years
-knitr::include_graphics(here::here("main-figures", "Boxviolin_blues.png"))
-```
-
-
-```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
-cat("\n\n\\pagebreak\n")
-```
-
-
-```{r selected geno bb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S5:Proportion of the phenotypic variance for 71 Black (BB), 72 Navy (NB), and 21 Red (SR) beans for grain yield in Kg/ha (GY: 2017 - 2022; GY2: only 2021) days to maturity (DM, days), plant height (PH, cm) and lodging (LD,scale) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant."}
+```{r selected geno bb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S4:Proportion of the phenotypic variance for 71 Black (BB), 72 Navy (NB), and 21 Red (SR) beans for grain yield in Kg/ha (GY: 2017 - 2022; GY2: only 2021) days to maturity (DM, days), plant height (PH, cm) and lodging (LD,scale) traits evaluated in the study. * Significant at P < 0.05. ** Significant at P < 0.01. *** Significant at P < 0.001. ns, nonsignificant."}
 
 knitr::include_graphics(here::here("main-figures", "Rplot_VarCompFinal.png"))
 
@@ -633,7 +644,19 @@ cat("\n\n\\pagebreak\n")
 ```
 
 
-```{r plot_ggstatsplot2, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S6: Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations"}
+```{r plot_ggstatsplot_met_fig, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S5: Combination of box and violin plots along with jittered data points and grand mean values for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Small Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA: Sanilac, TU: Tuscola. Pairwise Games-Howell test used. Comparisons showing only significant between the pairs of environments."}
+
+## Figure showing the results corrected across years
+knitr::include_graphics(here::here("main-figures", "Boxviolin_blues.png"))
+```
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+
+```{r plot_ggstatsplot2, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Supplemental Figure S6: Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola locations"}
 
 ## Figure showing the results corrected across years
 knitr::include_graphics(here::here("main-figures", "BLUES_means.png"))
@@ -648,7 +671,21 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno bb2, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S7:Mean performance (a) and stability (b) for grain yield (GY) of 72 black beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r S7 ok,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S7: Genotype x environment interaction characterization of all beans market classes combined dataset from 2017 to 2022. The left panel (a) shows a GGE biplot using the adjusted grain yield (GY) phenotypic means for each location averaged across years. Mega-environments (MEs, in the divided sector by the perpendicular lines to the sides of the polygon) were built using the winning genotypes from the GGE biplot. The right top panel (b) shows the discriminativeness and representativeness among environments and in relation to (c) the ideal environment. The right bottom panel (d) shows the GEI correlation among locations. PC, principal component; BA, Bay; TU, Tuscola; HU, Huron; SA, Sanilac."}
+
+knitr::include_graphics(here::here("main-figures", "S12_allMKT2.png"))
+
+```
+
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+
+
+```{r selected geno bb2, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S8: Mean performance (a) and stability (b) for grain yield (GY) of 72 black beans genotypes. The vertical dashed and solid lines show, respectively, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_BB.png"))
 
@@ -662,7 +699,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno nb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S8: Mean performance (a) and stability (b) for grain yield (GY) of 71 navy beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r selected geno nb, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S9: Mean performance (a) and stability (b) for grain yield (GY) of 71 navy beans genotypes. The vertical dashed and solid lines show, respectively, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_NB.png"))
 
@@ -676,7 +713,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected geno sr, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S9: Mean performance (a) and stability (b) for grain yield (GY) of 21 red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
+```{r selected geno sr, echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S10: Mean performance (a) and stability (b) for grain yield (GY) of 21 red beans genotypes. The vertical dashed and solid lines show, respectively, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index."}
 
 knitr::include_graphics(here::here("main-figures", "Sel_GY_SR.png"))
 
@@ -690,7 +727,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplemental Figure S10: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
+```{r blups CI2,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.align="center", fig.pos= "H", dpi = 600, fig.cap= "Supplemental Figure S11: BLUP-based stability indexes coincidence index (CI) using selection intensity of 20 top genotypes. BB, black; NB, navy; SR, red beans."}
 
 knitr::include_graphics(here::here("main-figures", "CI_blups.png"))
 
@@ -704,7 +741,7 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S11: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, the ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same from those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
+```{r selected waasb,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S12: Ranks of dry beans genotypes (a: 72 black, b:71 navys and c: 21 small red/pink) considering different weights for stability and yielding. The most-left ranks were obtained considering the stability only. The most right-ranks were obtained considering the grain yield only. Between the extremes, ranks were obtained different weights for stability and yielding. The four clusters represent four classes of genotypes: (1) Poorly productive and unstable genotypes; (2) productive but unstable genotypes; (3) stable but poorly productive genotypes; and (4), highly productive and stable genotypes. The ranks highlighted by a black rectangle are the same as those BLUPs predicted to WAASBY index and the red rectangle box are the selected genotypes by the Multi-Trait Stability Index (MTSI)."}
 
 knitr::include_graphics(here::here("main-figures", "waasb_ratio_new.png"))
 
@@ -719,7 +756,36 @@ cat("\n\n\\pagebreak\n")
 
 
 
-```{r figure pred year 2, echo=FALSE, include=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Genetic yield gains for black (BB), navy (NB), and (SR) market classes of dry bean varieties regressed against year. For BB yields have improved by 57.7 kg ha−1 annually, while NB and SR yields have decreased by, respectively, 4.8 kg and 13.3 ha−1 annually. Best linear unbiased predictors (BLUPs) of varieties yields in each market class were based on trials in four environments (BA: Bay, HU: Huron, SA: Sanilac, TU: Tuscola) across the state of Michigan from 2017 to 2022."}
+```{r s13,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S13: Joint interpretation for mean performance and stability for grain yield (GY) in Kg/ha (a) and mean performance (b) for grain yield (GY) analysis. The vertical dashed and solid lines show, respectively, the mean of the selected genotype and the overall mean for both mean performance and WAASB index. Black, Navy and Small Red beans are represented by bars colors black, blue and red. The x axis shows the arithmetic mean for each genotype × environment interaction and y axis the weighted average of absolute scores from the singular value decomposition of the matrix of best linear unbiased predictions for the genotype × environment interaction effects generated by a combined linear mixed-effect model (WAASB) of 72 Black, 71 Navy and 21 Small Red beans evaluated in 4 environments (BA: Bay, HU: Huron, SA: Sanilac, TU: Tuscola). The blue shaded squared in the quadrant IV are the potential selected genotypes considering combined analysis."}
+
+knitr::include_graphics(here::here("main-figures", "S13.png"))
+
+```
+
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+
+
+```{r s14,echo=FALSE, warning=FALSE, message=FALSE, out.width="100%", fig.pos= "H", fig.align="center", dpi = 600, fig.cap="Supplemental Figure S14: MTME model: Genotypic correlation between GY, DPM, and PH across genotypes and locations for all market classes (BB, NB, and SR) combined analysis (CombMKT). The genotype (G) and genotype × environment interactions (GEI) correlation coefficients between the GY, DM, PH, and LD traits."}
+
+knitr::include_graphics(here::here("main-figures", "Rplot_MTME-allmkt.png"))
+
+```
+
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+
+
+
+```{r figure pred year 2, echo=FALSE, include=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Genetic yield gains for black (BB), navy (NB), and (SR) market classes of dry bean varieties regressed against year. For BB yields have improved by 57.7 kg ha−1 annually, while NB and SR yields have decreased by, respectively, 4.8 kg and 13.3 ha−1 annually. Best linear unbiased predictors (BLUPs) of varieties yields in each market class were based on trials in four environments (BA: Bay, HU: Huron, SA: Sanilac, TU: Tuscola) across the state of Michigan from 2017 to 2022."}
 
 knitr::include_graphics(here::here("main-figures", "plot_year_gains-1.png"))
 
@@ -754,42 +820,65 @@ The main focus of this manuscript, as describe in the [published paper](link%20h
 
 ## Packages
 
-This document was prepared on `r format(Sys.Date())`.
+R packages version from: `r format(Sys.Date())`.
 
 ```{r message=TRUE, warning=FALSE, results='asis',echo = F}
-               library(asreml) # To run the Mixed-models analysis in loops and using COV structure       
-               library(asremlPlus)
-               library(metan) # To run the MET models
-               library(statgenGxE) # To run the MET models with ASREml 
-               library(DT)  # Used to make the tables
-               library(ggplot2)
-               library(dplyr)
-               library(data.table)
-               library(plyr)
-               library(raster)
-               library(tidyr)
-               library(maps)
-               library(mapdata)
-               library(tigris)
-               library(rcartocolor)
-               library(cowplot)
-               library(sf)
-               library(nadiv)
-               library(broom)
-               library(spData)
-               library(ggstatsplot)
-               library(cowplot) # used in this material to arrange the graphics
-               library(magrittr) # To use the forward-pipe operator %>%
-               library(kableExtra) # used in this material to make tables
-               library(flextable)
-               library(ggcorrplot)
-               library(naniar)
-               library(ggforce)
-               library(ggpmisc)
-               library(gridExtra)
-               library(openxlsx)
-               library(ggdist)
-               library(tidyquant)
+          library(rmarkdown) 
+          library(ggpmisc) 
+          library(ggpp) 
+          library(gridExtra) 
+          library(magrittr)
+          library(Matrix)
+          library(mapdata) 
+          library(maps) 
+          library(spData) 
+          library(asremlPlus) 
+          library(tidyquant) 
+          library(usmap) 
+          library(data.table) 
+          library(ggspatial)
+          library(ggpattern) 
+          library(viridisLite) 
+          library(viridis) 
+          library(flextable) 
+          library(lubridate) 
+          library(raster) 
+          library(ggcorrplot) 
+          library(ggdist) 
+          library(tibble) 
+          library(RColorBrewer) 
+          library(rcartocolor) 
+          library(metan) 
+          library(ggstatsplot) 
+          library(sp) 
+          library(sf) 
+          library(ggforce) 
+          library(patchwork) 
+          library(PerformanceAnalytics) 
+          library(broom) 
+          library(quantmod) 
+          library(xts) 
+          library(openxlsx) 
+          library(asreml) 
+          library(naniar) 
+          library(TTR) 
+          library(statgenGxE) 
+          library(tigris) 
+          library(plyr) 
+          library(ggplot2) 
+          library(stringr) 
+          library(forcats) 
+          library(tidyverse) 
+          library(dplyr) 
+          library(purrr) 
+          library(readr) 
+          library(tidyr) 
+          library(cowplot) 
+          library(nadiv) 
+          library(DT) 
+          library(zoo) 
+          library(kableExtra) 
+
 
 summary(report::report(sessionInfo()))
 
@@ -853,8 +942,14 @@ The following pipeline will be used: 1-Stage = BLUEs estimation for the vector o
 ```{r eval=T, child=if (fast == FALSE) '2_two_stage_MET_desc.Rmd'}
 ```
 
-
 # Appendix D - R codes
+
+
+## MET analysis - **Market class combined**
+
+```{r eval=T,child=if (fast == FALSE) '2.2_comb_MKT_MET.Rmd'}
+```
+
 
 ## MET analysis - **Black beans**
 
@@ -875,6 +970,10 @@ The following pipeline will be used: 1-Stage = BLUEs estimation for the vector o
 
 ## Multi-trait Multi-env analysis
 
+
+- GY data set: were obtained from the adjusted data in the 2nd-stage mixed models analysis.
+- PH, PM, and LD were obtained from the coincident locations (TU, BA and SA) in 2021 only.
+
 ```{r eval=T,child=if (fast == FALSE) '6_MultTrait.Rmd'}
 ```
 
@@ -888,4 +987,4 @@ cat("\n\n\\pagebreak\n")
 report::cite_packages(sessionInfo())
 ```
 
-# References
+<!-- # References -->

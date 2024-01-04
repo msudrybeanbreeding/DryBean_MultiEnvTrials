@@ -17,7 +17,7 @@ data_beans <- data.table(data_beans)
 
 ### Box plot dist.
 
-```{r Box plot_raw data complete, eval= FALSE, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+```{r Box plot_raw data complete, eval= FALSE, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
 
 plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=data_beans, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
                               ylab= "GY", xlab = "Locations",
@@ -34,7 +34,7 @@ print(arrange_ggplot(plotDM_stats_mkt_loc,plotDM_stats_mkt_year))
 ```
 
 
-```{r Box plot_raw data, eval=TRUE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, out.width="100%"}
+```{r Box plot_raw data, eval=TRUE, fig.height=figheight, fig.width=figwidth, message=FALSE, warning=FALSE, dpi=600, out.width="100%"}
 
 a<- ggplot(data=data_beans, aes(x=reorder(loc, -gy_kg_ha), y=gy_kg_ha, fill=loc)) +
   ggdist::stat_halfeye(
@@ -401,7 +401,7 @@ sr2<- sr2 +
 
 
 Box plot distribution for each market class in this study across years and locations.
-```{r plot_Box complete final, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+```{r plot_Box complete final, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
 
 print(arrange_ggplot(bb1,bb2,
                      nb1,nb2,
@@ -416,10 +416,23 @@ print(arrange_ggplot(bb1,bb2,
 
 Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
 
-- Black beans (BB)
-**Pairwise Games-Howell test used. Comparisons showing only significant**
+-   Combination analysis across all market classes (Comb_MKT) 
+-   **Pairwise Games-Howell test used. Comparisons showing significant values only**
 
-```{r plot_ggstatsplot_desc_BB, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+```{r plot_ggstatsplot_desc_all_mkt, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+plotDM_stats_mkt_loc_all<- grouped_ggbetweenstats(data=data_beans, x= loc, y=gy_kg_ha, type = "parametric", 
+                                                  bf.message = F, results.subtitle = F,
+ylab= "GY", xlab = "Locations", plot.type = "boxviolin", grouping.var = year )
+
+print(plotDM_stats_mkt_loc_all)
+
+```
+
+
+-   Black beans (BB)
+-   **Pairwise Games-Howell test used. Comparisons showing significant values only**
+
+```{r plot_ggstatsplot_desc_BB, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
 data_beans_plotBB<- droplevels(subset(data_beans, mkt=="BB"))
 
 plotDM_stats_mkt_loc_BB<- grouped_ggbetweenstats(data=data_beans_plotBB, x= loc, y=gy_kg_ha, type = "parametric",  bf.message = F, results.subtitle = F, 
@@ -434,10 +447,10 @@ print(plotDM_stats_mkt_loc_BB)
 ### GEI Comparisons (loc:year) - NB 
 
 Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
-- Navy beans (NB)
-**Pairwise Games-Howell test used. Comparisons showing only significant**
+-   Navy beans (NB)
+-   **Pairwise Games-Howell test used. Comparisons showing significant values only**
 
-```{r plot_ggstatsplot_desc_NB, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+```{r plot_ggstatsplot_desc_NB, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
 
 data_beans_plotNB<- droplevels(subset(data_beans, mkt=="NB"))
 
@@ -450,10 +463,10 @@ print(plotDM_stats_mkt_loc_NB)
 ### GEI Comparisons (loc:year) - SR 
 
 Box plots for between-subjects comparisons by locations using the R package `ggstatsplot`.
-- Black beans (SR)
-**Pairwise Games-Howell test used. Comparisons showing only significant**
+-   Black beans (SR)
+-   **Pairwise Games-Howell test used. Comparisons showing significant values only**
 
-```{r plot_ggstatsplot_desc_SR, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
+```{r plot_ggstatsplot_desc_SR, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, dpi = 600, out.width="100%"}
 
 data_beans_plotSR<- droplevels(subset(data_beans, mkt=="SR"))
 
@@ -468,7 +481,7 @@ print(plotDM_stats_mkt_loc_SR)
 
 For further insight into the correlation structure between trials a scatter plot matrix can be made using the package `statgenGxE`
 
-```{r TDscatter2, warning=FALSE, out.width="100%", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r TDscatter2, warning=FALSE, out.width="100%", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 dropsTD <- statgenSTA::createTD(data = data_beans, genotype = "name", trial = "loc")
 options("statgen.genoColors" = c("black", "blue", "red"))
 plot(dropsTD, plotType = "scatter", traits = "gy_kg_ha", colorGenoBy = "mkt", 
@@ -485,7 +498,6 @@ However, the data set was cleaned before at a previous analysis not shown in thi
 - yield <= 0.5 | yield >= 7.5 (considering yield as Lb per plot)
 - moisture >= 30 | moisture <= 5 (considering moisture in %)
 
-At this point yield data will not be removed anymore, but we can check it out for further investigation, if it was needed. 
 
 ```{r data_outliers1, warning=FALSE, message=TRUE, results='asis'}
 
@@ -494,24 +506,41 @@ out_beans<- find_outliers(data_beans, by=mkt, var = gy_kg_ha, plots = F)
 #out_beans
 ```
 
-- No outliers removed after the data inspection based on the Breeder expertise.
+- No outliers removed after the data inspection based on Breeder's expertise.
 
 ### Map of locations 
 
-This figure represent all counties locations evaluated in this study at Michigan, midwest in the USA.
+```{r message=FALSE, warning=FALSE, include=FALSE}
+source("utils/map_fig1.R")
+```
 
-```{r locations map, warning=FALSE, out.width="100%", message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H"}
 
-source("utils/map.R")
+```{r combined_plot1, warning=FALSE, out.width="100%", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap= "Historical dry beans production in tons across years for black beans (BB), navy beans (NB) and small red beans (SR)."}
 
-print(MI_trials_beans_map)
+print(combined_plot)
 
+```
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+```{r combined_plot2, warning=FALSE, out.width="100%", message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap= "Counties locations evaluated in this study at Michigan, mid-west in the USA. For each MI county, the blue scale shows the last year of data available."}
+
+print(mi_plot)
+
+```
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
 ```
 
 
 ### Missing values
 
-```{r missing geno gy, warning=FALSE, message=FALSE, out.width="100%", fig.pos="H", fig.align="center", dpi = 600, fig.cap="Missing genotypes by market classes"}
+```{r missing geno gy, warning=FALSE, message=FALSE, out.width="100%", fig.pos="H", fig.align="center", dpi = 600, fig.cap="Missing genotypes by beans market classes"}
 
 data_beans.miss.f<- data_beans %>% 
   unite(name_year_loc, c(name, year_loc), remove = F) %>% 
@@ -541,7 +570,10 @@ gg_miss_fct(data_beans.miss,fct = mkt)+ggtitle("Missing values (NA)") +
 
 source("utils/Coinc.R")
 
-arrange_ggplot(plotB, plotN, plotSR,ncol = 1)
+#arrange_ggplot(plotB, plotN, plotSR,ncol = 1)
+
+## Figure showing the results corrected across years
+knitr::include_graphics(here::here("figures", "coincidence geno fig1-1.png"))
 
 ```
 

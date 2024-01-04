@@ -66,7 +66,7 @@ mod.1 <- asreml(fixed       = gy_kg_ha ~  loc + loc:rep,
    # print(summary.asreml(mod.1)$varcomp)
     # wald(mod.1)
 
-  blup.1<- data.table((mod.1$predictions$pvals[1:3])) 
+  blup.1<- as.data.frame((mod.1$predictions$pvals[1:3])) 
   names(blup.1) <- c("name", "yield", "se")
   blup.1$mkt<- cj
   
@@ -127,7 +127,7 @@ flextable(head(blues_stage.I)) %>%
 #### Box plot distribution
 
 **Pairwise Games-Howell test used. Comparisons showing only significant**
-```{r plot_ggstatsplot_pred year, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values."}
+```{r plot_ggstatsplot_pred year, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values."}
 
 plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=blues_stage.I, x= year, y=yield, type = "parametric",  bf.message = F, results.subtitle = F, 
                               ylab= "GY", xlab = "Year",
@@ -153,7 +153,7 @@ blues_stage.I$year[blues_stage.I$year == 6]<- 22
 
 ```
 
-```{r figure pred year, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Genetic yield gains for black (BB), navy (NB) and (SR) market classes of dry beans varieties regressed against year. For BB yields have improved by 111 kg ha−1 annually, NB yields have improved by 67 kg ha−1 annually, and SR yields have improved by 6.64 kg ha−1 annually.Best linear unbiased predictors (BLUPs) of varieties yields in each market classes were based on trials in four environments (BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola) across the state of Michigan from 2017 to 2021."}
+```{r figure pred year, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Genetic yield gains for black (BB), navy (NB) and (SR) market classes of dry beans varieties regressed against year. For BB yields have improved by 111 kg ha−1 annually, NB yields have improved by 67 kg ha−1 annually, and SR yields have improved by 6.64 kg ha−1 annually.Best linear unbiased predictors (BLUPs) of varieties yields in each market classes were based on trials in four environments, BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola, across the state of Michigan from 2017 to 2022."}
 
 cols = c("black", "turquoise", "red")
 #formula <- y ~ x
@@ -204,7 +204,7 @@ beans_desc<-data.frame(beans_desc, row.names =T)
 ```
 
 
-```{r plot_year_gains, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values."}
+```{r plot_year_gains, echo=FALSE, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by years of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing significant values only."}
 
 plot1 + annotation_custom(tableGrob(beans_desc, theme = ttheme_default(base_size = 12, base_colour = "black", base_family = "",parse = T, padding = unit(c(4, 4), "mm"))), xmin=19, xmax=22, ymin=2000, ymax=2200 )
 ```

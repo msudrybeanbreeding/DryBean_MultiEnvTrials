@@ -12,7 +12,7 @@ if(!file.exists("index.Rmd") && file.exists("../index.Rmd")) {
 rmarkdown::render('index.Rmd', output_format = "html_document", output_dir = "docs/", output_file = "index")
 
 #Render Word
-rmarkdown::render('index.Rmd', output_format = "word_document", output_dir = "word_and_pdf/", output_file = "SupplementaryMaterials")
+rmarkdown::render('index.Rmd', output_format = "word_document", output_dir = "word_and_pdf/", output_file = "SupplementaryMaterials_v2")
 
 # Render PDF
-rmarkdown::render('index.Rmd', output_format = "pdf_document", output_dir = "word_and_pdf/", output_file = "SupplementaryMaterials_v1")
+rmarkdown::render('index.Rmd', output_format = "pdf_document", output_dir = "word_and_pdf/", output_file = "SupplementaryMaterials_v2")

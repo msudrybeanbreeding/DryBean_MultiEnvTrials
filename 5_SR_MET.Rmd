@@ -24,7 +24,7 @@ summ.sr.met.asreml<- data.frame(summary.asreml(mod.met.asreml.sr1)$varcomp)
 summ.sr.met.asreml
 
 #print(summary.asreml(mod.met.asreml.sr1)$bic)
-mod.met.asreml.sr<- data.table((mod.met.asreml.sr1$predictions$pvals[1:3]))
+mod.met.asreml.sr<- as.data.frame((mod.met.asreml.sr1$predictions$pvals[1:3]))
 names(mod.met.asreml.sr) <- c("name", "yield_BLUPS_MET", "SE")
 
 ###
@@ -114,7 +114,7 @@ GGE biplot done using:
 - **environment**: singular value is entirely partitioned into the environment eigenvectors, also called column metric preserving
 
 
-```{r sr gge fig1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r sr gge fig1, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 gge_model.sr <- gge(blues_stage.I_SR, loc, name, yield, 
                     centering = "environment", #1
                     scaling = "sd", #2
@@ -167,7 +167,7 @@ GGE biplot done using:
 - **genotype**: singular value is entirely partitioned into the environment eigenvectors, also called column metric preserving
 
 
-```{r sr gge fig2, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r sr gge fig2, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 gge_model.sr <- gge(blues_stage.I_SR, loc, name, yield,
                      centering = "environment", #2
                     scaling = "sd", #1
@@ -193,7 +193,7 @@ print(e)
 
 WAASP index and BLUPs to estimate stability analysis.
 
-```{r mod metan sr stab, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r mod metan sr stab, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 waasb_model_sr <- 
   waasb(blues_stage.I_SR,
         env = loc,
@@ -261,7 +261,7 @@ selected_table[,1:8]
 
 #### Selection differentials
 
-```{r mod metan sr stab2, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 24 Small Red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
+```{r mod metan sr stab2, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.cap="Mean performance (a) and stability (b) for grain yield (GY) of 24 Small Red beans genotypes. The vertical dashed and solid lines shows, respectivelly, the  mean of the selected genotype and the overall mean for both mean performance and WAASB index"}
 
 #Create a data frame with BLUPS - selected and non-selected
 blups_sel <-
@@ -378,7 +378,7 @@ data_sel_perc2
 ```
 
 
-```{r mod metan sr stab5, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r mod metan sr stab5, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 ##BLUPs indexes
 stab_blups_sr<- blup_indexes(waasb_model_sr) 
 stab_blups_sr<- as_tibble(stab_blups_sr$yield)
@@ -412,7 +412,7 @@ stab_blups_sr[,1:8]
 
 Planning different scenarios of waasby estimation by changing the weights assigned to the stability and the mean performance according to [@olivotoMeanPerformanceStability2019](Olivoto et al., 2019a).
 
-```{r mod metan sr stab6, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r mod metan sr stab6, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 scenarios <- wsmp(waasb_model_sr,progbar = F)
 
 scen1<- plot(scenarios, type = 1) + 
@@ -446,7 +446,7 @@ and *M* is the number of genotypes selected according to the selection intensity
 
 
 
-```{r mod metan sr stab7, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
+```{r mod metan sr stab7, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600}
 coinc_1 <- stab_blups_sr %>% dplyr::select(GEN,HMRPGV_R) %>% arrange(HMRPGV_R)
 coinc_2 <- stab_blups_sr %>% dplyr::select(GEN,RPGV_R) %>% arrange(RPGV_R)
 coinc_3 <- stab_blups_sr %>% dplyr::select(GEN,HMGV_R) %>% arrange(HMGV_R)

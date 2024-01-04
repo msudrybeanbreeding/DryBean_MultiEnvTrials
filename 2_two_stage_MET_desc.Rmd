@@ -127,6 +127,8 @@ data_beans <- bind_rows(data_beans_1Y, data_beans_2Y, data_beans_3Y, data_beans_
 #str(data_beans)
 data_beans$var_years <- as.factor(data_beans$var_years)
 year <- nlevels(data_beans$var_years)
+
+data_beans_group<- data_beans
 ## Analysis per site and mkt class
 #mkt_n <- levels(data_beans$mkt)
 
@@ -172,7 +174,7 @@ if(y == 1) {next
    # print(summary.asreml(mod.1)$varcomp)
     # wald(mod.1)
 
-  blue.1<- data.table((mod.1$predictions$pvals[1:4])) 
+  blue.1<- as.data.frame((mod.1$predictions$pvals[1:4])) 
   names(blue.1) <- c("name", "rep", "yield", "se")
   blue.1$mkt<- cj
   blue.1$var_years<- cy
@@ -348,7 +350,8 @@ flextable(head(blues_stage.I_SR)) %>%
 
 **Pairwise Games-Howell test used. Comparisons showing only significant**
 
-```{r plot_ggstatsplot_met, echo=FALSE, fig.heiht=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Figure S4: Combination of box and violin plots along with jittered data points for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola."}
+```{r plot_ggstatsplot_met, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by locations of grain yield (GY) for black (BB), Navy (NB) and Red (SR) beans. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola."}
+
 
 plotDM_stats_mkt_loc<- grouped_ggbetweenstats(data=blues_stage.I, x= loc, y=yield, type = "parametric",  bf.message = F, results.subtitle = F, 
                               ylab= "GY", xlab = "Locations",
@@ -361,11 +364,28 @@ print(plotDM_stats_mkt_loc)
 ```
 
 
+```{r plot_ggstatsplot_met2, fig.height=figheight, fig.width=figwidth, message=FALSE, fig.pos= "H", out.width="100%", warning=FALSE, dpi=600, fig.cap="Combination of box and violin plots along with jittered data points for between subjects comparisons by locations of grain yield (GY) for the combined analysis (CombMKT) across all market classes. Pairwise Games-Howell test used. Comparisons showing only significant values. BA: Bay, HU: Huron, SA:Sanilac, TU: Tuscola."}
+
+plotDM_stats_mkt_loc<- ggbetweenstats(data=blues_stage.I, x= loc, y=yield, type = "parametric",  bf.message = F, results.subtitle = F, 
+                              ylab= "GY", xlab = "Locations",
+                              plot.type = "boxviolin"
+                              ) 
+
+print(plotDM_stats_mkt_loc)
+
+#https://indrajeetpatil.github.io/ggstatsplot_slides/slides/ggstatsplot_presentation.html#1
+```
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
 
 #### Phenotypic variance components 
 
 
-```{r coincidence geno1, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.pos="H", fig.align="center", dpi = 600, out.width="100%", fig.cap="Proportion of the phenotypic variance for three dry beans traits evaluated across three locations. GY1, grain yield from 2017 to 2022; GY2, grain yield only in 2021; DM, days to maturity; PH, plant height; LD, lodging."}
+```{r coincidence geno1, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.pos="H", fig.align="center", dpi = 600, out.width="100%", fig.cap="Proportion of the phenotypic variance for three dry beans traits evaluated across three locations. GY1, grain yield from 2017 to 2022; GY2, grain yield only in 2021; DM, days to maturity; PH, plant height; LD, lodging."}
 
 
 data_beans_var = read.csv("data/VarStack.csv",h=T, stringsAsFactors = T)
@@ -393,11 +413,15 @@ ggplot(data_beans_var, aes(x = trait, y = Freq, fill = Comp, label = Comp)) +
 ```
 
 
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
 
 #### Genotyping performance 
 
 
-```{r MET metan, warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) from the 1-stage mixed model analysis. "}
+```{r MET metan, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Genotype’s performance across the environments for Black (BB), Navy (NB), and Small Red (SR) beans using the estimated means (BLUEs) from the 1-stage mixed model analysis. "}
 blues_stage.I_BB_ge<- na.omit(blues_stage.I_BB)
 stab_bb <- ge_plot(blues_stage.I_BB_ge, type = 1,
         env = loc,
@@ -439,12 +463,64 @@ print(arrange_ggplot(stab_bb, stab_nb,stab_sr))
 
 
 
+```{r MET metan all mkt, warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H", fig.cap="Genotype’s performance across the environments for all beans maket classes combined (combMKT)  using the estimated means (BLUEs) from the 1-stage mixed model analysis. "}
+
+stab_allMKT <- ge_plot(blues_stage.I, type = 1,
+        env = loc,
+        gen = name,
+        resp = yield) + xlab("") + ylab("Genotypes") +
+theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1),
+      axis.text.y = element_text(size = 7, angle = 0, vjust = 0.5, hjust = 1),
+      legend.position ="none", plot.title=element_text(hjust=0.5)) +
+  labs(title = "Comb_MKT")
+
+print(stab_allMKT)
+
+```
+
+
+```{r echo=FALSE, message=TRUE, warning=FALSE, results='asis'}
+cat("\n\n\\pagebreak\n")
+```
+
+
 ## Descriptive MET  
 
 - Genetic correlations across environment using the Unstructured (US) variance-covariance structure.
 
 
 This mixed model will be used only for genotype x environment correlations in order to investigate the GEI correlations.
+
+Combined analysis across all market classes (Comb_MKT)
+
+```{r}
+mod.us.all <- asreml(fixed = yield ~ loc + loc:rep ,
+                      random = ~ name:us(loc) ,
+                      data = blues_stage.I,
+                      predict = predict.asreml(classify = "name"),
+                      trace = F,
+                      maxit = 500)
+#print(wald(mod.us.bb))
+#print(summary.asreml(mod.us.bb)$varcomp)
+f=summary(mod.us.all)$varcomp[1:10,1]
+z=matrix(0, 4,4)
+z[upper.tri(z)| row(z)==col(z)] <- f
+corf=z/sqrt(diag(z)%*%t(diag(z)))
+#corf
+rownames(corf)=c(
+"BA",
+"HU",
+"SA",
+"TU")
+colnames(corf)=rownames(corf)
+plotAll<- ggcorrplot(corf, colors = c("#6D9EC1", "white", "#E46726"),
+title = " Comb_MKT",
+show.legend = F,
+legend.title = "rgg" ,lab_size=5,tl.srt = 90,type = c("upper"), lab = T,digits = 4,
+outline.color = "white",pch.col = "white", tl.col = "blue",show.diag = FALSE)
+print(plotAll)
+```
+
 
 ```{r met asreml model, warning=FALSE, message=TRUE, results='asis'}
 
@@ -558,7 +634,7 @@ corr.loc<-summary(mod.us.sr)$varcomp[2,1] /
 ```
 
 
-```{r corr combined figure,  warning=FALSE, message=FALSE, fig.heiht=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H"}
+```{r corr combined figure,  warning=FALSE, message=FALSE, fig.height=figheight, fig.width=figwidth, fig.align="center", dpi = 600, fig.pos="H"}
 
 arrange_ggplot(plotBB,plotNB, plotSR,ncol = 3)
 
